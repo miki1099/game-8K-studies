@@ -1,4 +1,4 @@
-/*
+package gui;/*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
@@ -19,15 +19,16 @@ public class MenuPanel extends javax.swing.JPanel {
     private static final MenuPanel MENU_PANEL = new MenuPanel();
     private Image img;
     /**
-     * Creates new form MenuPanel
+     * Creates new form gui.MenuPanel
      */
     private MenuPanel() {
         try {
-            img = ImageIO.read(getClass().getResource("Graphics/menuGraphic.jpg"));
+            img = ImageIO.read(getClass().getResource("/gui/Graphics/menuGraphic.jpg"));
         } catch (IOException ex) {
             ex.printStackTrace();
         }
         initComponents();
+
     }
     public static MenuPanel getInstance(){
         return MENU_PANEL;
@@ -140,7 +141,7 @@ public class MenuPanel extends javax.swing.JPanel {
     }
 
     private void startButtonActionPerformed(java.awt.event.ActionEvent evt) {
-        // TODO add your handling code here:
+        Window.gameStart();
     }
     // Variables declaration - do not modify
     private javax.swing.JButton scoreButton;

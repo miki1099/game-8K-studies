@@ -1,11 +1,10 @@
-/*
+package gui;/*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
 
 import java.awt.*;
-import javax.swing.*;
 
 /**
  *
@@ -14,9 +13,10 @@ import javax.swing.*;
 public class Window extends javax.swing.JFrame {
 
     static MenuPanel menuPanel;
+    static GamePanel gamePanel;
     private static final Window WINDOW= new Window();
     /**
-     * Creates new form Window
+     * Creates new form gui.Window
      */
     private Window() {
         initComponents();
@@ -41,7 +41,7 @@ public class Window extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("8K");
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-        setIconImage(new javax.swing.ImageIcon(getClass().getResource("/Graphics/mountain.png")).getImage());
+        setIconImage(new javax.swing.ImageIcon(getClass().getResource("/gui/Graphics/mountain.png")).getImage());
         setName("gameWindow"); // NOI18N
         setPreferredSize(new java.awt.Dimension(1280, 1024));
         pack();
@@ -58,15 +58,23 @@ public class Window extends javax.swing.JFrame {
          * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html
          */
 
-            Window window = getInstance();
-            menuPanel = MenuPanel.getInstance();
-            menuPanel.setVisible(true);
-            window.add(menuPanel);
-            window.setVisible(true);
+        Window window = getInstance();
+        menuPanel = MenuPanel.getInstance();
+        menuPanel.setVisible(true);
+//        gamePanel = new GamePanel();
+//        gamePanel.setVisible(false);
+        window.add(menuPanel);
 
-
+        window.setVisible(true);
     }
 
+    public static void gameStart(){
+        menuPanel.setVisible(false);
+        WINDOW.remove(menuPanel);
+        gamePanel = new GamePanel();
+        WINDOW.add(gamePanel);
+        gamePanel.setVisible(true);
+    }
     // Variables declaration - do not modify
     // End of variables declaration
 }
