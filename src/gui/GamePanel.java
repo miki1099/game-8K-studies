@@ -1,9 +1,11 @@
 package gui;
 
+import gameLogic.GameLogic;
 import gameLogic.Routes;
 import gameLogic.SiteParameters;
 
 import javax.swing.*;
+import javax.swing.border.BevelBorder;
 import java.util.ArrayList;
 import java.util.List;
 import com.google.common.collect.BiMap;
@@ -14,16 +16,33 @@ import com.google.common.collect.HashBiMap;
  * @author mikig
  */
 public class GamePanel extends javax.swing.JPanel {
+    private GameLogic gameLogic;
     private List<JLabel> climber1Icons;
     private List<JLabel> climber2Icons;
     private BiMap<SiteParameters, JLabel> sitesWithParametersMapLeft;
     private BiMap<SiteParameters, JLabel> sitesWithParametersMapRight;
+    private boolean isGoingToMoveClimber;
+    private JLabel currentPositionReadyToMove;
+    private Icon iconClimber1 = new ImageIcon(getClass().getResource("/gui/Graphics/climber.png"));
+    private Icon iconClimber2 = new ImageIcon(getClass().getResource("/gui/Graphics/climber (1).png"));
     /**
+     *
      * Creates new form GamePanel
      */
     public GamePanel() {
         initComponents();
         gamePrepare();
+        constructGameLogicInstance();
+    }
+
+    private void constructGameLogicInstance(){
+        List<JLabel> currentPosLabels = new ArrayList<>();
+        List<SiteParameters> siteParameters = new ArrayList<>();
+        currentPosLabels.add(baseLeft);
+        currentPosLabels.add(baseRight);
+        siteParameters.add(new SiteParameters((byte) 0, Routes.E,Routes.D,Routes.C));
+        siteParameters.add(new SiteParameters((byte) 0, Routes.E,Routes.D,Routes.C));
+        gameLogic = GameLogic.getInstance(currentPosLabels, siteParameters);
     }
 
     private void gamePrepare(){
@@ -31,6 +50,8 @@ public class GamePanel extends javax.swing.JPanel {
         climber2Icons = new ArrayList<>();
         sitesWithParametersMapLeft = HashBiMap.create();
         sitesWithParametersMapRight = HashBiMap.create();
+
+        isGoingToMoveClimber = false;
 
         climber1Icons.add(climber1Icon);
         climber1Icons.add(climber1Icon1);
@@ -64,7 +85,7 @@ public class GamePanel extends javax.swing.JPanel {
         sitesWithParametersMap.put(new SiteParameters((byte) 3, Routes.D), fourthSiteDRoute);
         sitesWithParametersMap.put(new SiteParameters((byte) 4, Routes.D), fifthSiteDRoute);
 
-        sitesWithParametersMap.put(new SiteParameters((byte) 4, Routes.E), fourthSiteERoute);
+        sitesWithParametersMap.put(new SiteParameters((byte) 3, Routes.E), fourthSiteERoute);
         sitesWithParametersMap.put(new SiteParameters((byte) 4, Routes.E), fifthSiteERoute);
     }
 
@@ -140,10 +161,10 @@ public class GamePanel extends javax.swing.JPanel {
 
         setPreferredSize(new java.awt.Dimension(1280, 1024));
 
-        climber1Icon1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gui/Graphics/climber.png"))); // NOI18N
-        climber1Icon1.setToolTipText("");
 
-        climber2Icon1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gui/Graphics/climber (1).png"))); // NOI18N
+        climber1Icon1.setIcon(iconClimber1); // NOI18N
+        climber1Icon1.setToolTipText("");
+        climber2Icon1.setIcon(iconClimber2); // NOI18N
         climber2Icon1.setToolTipText("");
 
         acclimatizationClimber2.setStringPainted(true);
@@ -164,19 +185,19 @@ public class GamePanel extends javax.swing.JPanel {
 
         jLayeredPane1.setPreferredSize(new java.awt.Dimension(800, 1024));
 
-        baseLeft.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gui/Graphics/climber.png"))); // NOI18N
+        baseLeft.setIcon(iconClimber1); // NOI18N
         baseLeft.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         baseLeft.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                leftSiteMouseClicked(evt);
+                leftSiteMouseClicked(evt, baseLeft);
             }
         });
 
-        baseRight.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gui/Graphics/climber (1).png"))); // NOI18N
+        baseRight.setIcon(iconClimber2); // NOI18N
         baseRight.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         baseRight.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                rightSiteMouseClicked(evt);
+                rightSiteMouseClicked(evt, baseRight);
             }
         });
 
@@ -213,14 +234,14 @@ public class GamePanel extends javax.swing.JPanel {
         secondSiteLeft.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         secondSiteLeft.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                leftSiteMouseClicked(evt);
+                leftSiteMouseClicked(evt, secondSiteLeft);
             }
         });
 
         secondSiteRight.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         secondSiteRight.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                rightSiteMouseClicked(evt);
+                rightSiteMouseClicked(evt, secondSiteRight);
             }
         });
 
@@ -242,14 +263,14 @@ public class GamePanel extends javax.swing.JPanel {
         thirdSiteCRouteLeft.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         thirdSiteCRouteLeft.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                leftSiteMouseClicked(evt);
+                leftSiteMouseClicked(evt, thirdSiteCRouteLeft);
             }
         });
 
         thirdSiteCRouteRight.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         thirdSiteCRouteRight.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                rightSiteMouseClicked(evt);
+                rightSiteMouseClicked(evt, thirdSiteCRouteRight);
             }
         });
 
@@ -271,14 +292,14 @@ public class GamePanel extends javax.swing.JPanel {
         fourthSiteCRouteLeft.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         fourthSiteCRouteLeft.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                leftSiteMouseClicked(evt);
+                leftSiteMouseClicked(evt, fourthSiteCRouteLeft);
             }
         });
 
         fourthSiteCRouteRight.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         fourthSiteCRouteRight.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                rightSiteMouseClicked(evt);
+                rightSiteMouseClicked(evt, fourthSiteCRouteRight);
             }
         });
 
@@ -300,14 +321,14 @@ public class GamePanel extends javax.swing.JPanel {
         fifthSiteCRouteLeft.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         fifthSiteCRouteLeft.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                leftSiteMouseClicked(evt);
+                leftSiteMouseClicked(evt, fifthSiteCRouteLeft);
             }
         });
 
         fifthSiteCRouteRight.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         fifthSiteCRouteRight.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                rightSiteMouseClicked(evt);
+                rightSiteMouseClicked(evt, fifthSiteCRouteRight);
             }
         });
 
@@ -329,14 +350,14 @@ public class GamePanel extends javax.swing.JPanel {
         topSiteLeft.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         topSiteLeft.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                leftSiteMouseClicked(evt);
+                leftSiteMouseClicked(evt, topSiteLeft);
             }
         });
 
         topSiteRight.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         topSiteRight.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                rightSiteMouseClicked(evt);
+                rightSiteMouseClicked(evt, topSiteRight);
             }
         });
 
@@ -358,14 +379,14 @@ public class GamePanel extends javax.swing.JPanel {
         thirdSiteLeft.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         thirdSiteLeft.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                leftSiteMouseClicked(evt);
+                leftSiteMouseClicked(evt, thirdSiteLeft);
             }
         });
 
         thirdSiteRight.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         thirdSiteRight.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                rightSiteMouseClicked(evt);
+                rightSiteMouseClicked(evt, thirdSiteRight);
             }
         });
 
@@ -387,14 +408,14 @@ public class GamePanel extends javax.swing.JPanel {
         fourthSiteDRouteLeft.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         fourthSiteDRouteLeft.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                leftSiteMouseClicked(evt);
+                leftSiteMouseClicked(evt,fourthSiteDRouteLeft);
             }
         });
 
         fourthSiteDRouteRight.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         fourthSiteDRouteRight.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                rightSiteMouseClicked(evt);
+                rightSiteMouseClicked(evt, fourthSiteDRouteRight);
             }
         });
 
@@ -416,14 +437,14 @@ public class GamePanel extends javax.swing.JPanel {
         fifthSiteDRouteLeft.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         fifthSiteDRouteLeft.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                leftSiteMouseClicked(evt);
+                leftSiteMouseClicked(evt, fifthSiteDRouteLeft);
             }
         });
 
         fifthSiteDRouteRight.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         fifthSiteDRouteRight.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                rightSiteMouseClicked(evt);
+                rightSiteMouseClicked(evt, fifthSiteDRouteRight);
             }
         });
 
@@ -445,14 +466,14 @@ public class GamePanel extends javax.swing.JPanel {
         fourthSiteERouteLeft.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         fourthSiteERouteLeft.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                leftSiteMouseClicked(evt);
+                leftSiteMouseClicked(evt, fourthSiteERouteLeft);
             }
         });
 
         fourthSiteERouteRight.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         fourthSiteERouteRight.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                rightSiteMouseClicked(evt);
+                rightSiteMouseClicked(evt, fourthSiteERouteRight);
             }
         });
 
@@ -474,14 +495,14 @@ public class GamePanel extends javax.swing.JPanel {
         fifthSiteERouteLeft.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         fifthSiteERouteLeft.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                leftSiteMouseClicked(evt);
+                leftSiteMouseClicked(evt, fifthSiteERouteLeft);
             }
         });
 
         fifthSiteERouteRight.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         fifthSiteERouteRight.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                rightSiteMouseClicked(evt);
+                rightSiteMouseClicked(evt, fifthSiteERouteRight);
             }
         });
 
@@ -634,10 +655,10 @@ public class GamePanel extends javax.swing.JPanel {
                                         .addContainerGap(744, Short.MAX_VALUE)))
         );
 
-        climber1Icon.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gui/Graphics/climber.png"))); // NOI18N
+        climber1Icon.setIcon(iconClimber1); // NOI18N
         climber1Icon.setToolTipText("");
 
-        climber2Icon.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gui/Graphics/climber (1).png"))); // NOI18N
+        climber2Icon.setIcon(iconClimber2); // NOI18N
         climber2Icon.setToolTipText("");
 
         thingsList1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "siege backpack", "tent", "nothing" }));
@@ -693,10 +714,10 @@ public class GamePanel extends javax.swing.JPanel {
         predictedAccImpactClimber1Label.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         predictedAccImpactClimber1Label.setText("---");
 
-        climber1Icon2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gui/Graphics/climber.png"))); // NOI18N
+        climber1Icon2.setIcon(iconClimber1); // NOI18N
         climber1Icon2.setToolTipText("");
 
-        climber2Icon2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gui/Graphics/climber (1).png"))); // NOI18N
+        climber2Icon2.setIcon(iconClimber2); // NOI18N
         climber2Icon2.setToolTipText("");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -829,12 +850,48 @@ public class GamePanel extends javax.swing.JPanel {
         );
     }// </editor-fold>
 
-    private void rightSiteMouseClicked(java.awt.event.MouseEvent evt) {
-        // TODO add your handling code here:
+    private void makeReadyToMove(JLabel componentClicked){
+        if(gameLogic.getCurrentClimbersPosition().contains(componentClicked)){
+            isGoingToMoveClimber = true;
+            currentPositionReadyToMove = componentClicked;
+            componentClicked.setBorder(javax.swing.BorderFactory.createBevelBorder(BevelBorder.LOWERED));
+        }
     }
 
-    private void leftSiteMouseClicked(java.awt.event.MouseEvent evt) {
-        // TODO add your handling code here:
+    private void makeUnreadyToMove(){
+        isGoingToMoveClimber = false;
+        currentPositionReadyToMove.setBorder(javax.swing.BorderFactory.createBevelBorder(BevelBorder.RAISED));
+        currentPositionReadyToMove = null;
+    }
+
+    private void makeMove(JLabel componentClicked, BiMap<SiteParameters, JLabel> sitesWithParametersMap){
+        if(gameLogic.moveClimberAndShowResults(sitesWithParametersMap, componentClicked, currentPositionReadyToMove)){
+            componentClicked.setIcon(currentPositionReadyToMove.getIcon());
+            currentPositionReadyToMove.setIcon(null);
+            makeUnreadyToMove();
+        } else{
+            makeUnreadyToMove();
+        }
+    }
+
+    private void clickOperation(JLabel componentClicked, BiMap<SiteParameters, JLabel> sitesWithParametersMap){
+        if(isGoingToMoveClimber){
+            if(gameLogic.getCurrentClimbersPosition().contains(componentClicked)){
+                makeUnreadyToMove();
+            } else {
+                makeMove(componentClicked, sitesWithParametersMap);
+            }
+        } else {
+            makeReadyToMove(componentClicked);
+        }
+    }
+
+    private void rightSiteMouseClicked(java.awt.event.MouseEvent evt, JLabel componentClicked) {
+        clickOperation(componentClicked, sitesWithParametersMapRight);
+    }
+
+    private void leftSiteMouseClicked(java.awt.event.MouseEvent evt, JLabel componentClicked) {
+        clickOperation(componentClicked, sitesWithParametersMapLeft);
     }
 
     private void nextDayButtonActionPerformed(java.awt.event.ActionEvent evt) {
