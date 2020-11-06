@@ -1,0 +1,4 @@
+package gameLogic;
+
+class Climber {
+}

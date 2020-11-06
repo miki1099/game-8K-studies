@@ -1,22 +1,71 @@
 package gui;
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+import gameLogic.Routes;
+import gameLogic.SiteParameters;
+
+import javax.swing.*;
+import java.util.ArrayList;
+import java.util.List;
+import com.google.common.collect.BiMap;
+import com.google.common.collect.HashBiMap;
 
 /**
  *
  * @author mikig
  */
 public class GamePanel extends javax.swing.JPanel {
-
+    private List<JLabel> climber1Icons;
+    private List<JLabel> climber2Icons;
+    private BiMap<SiteParameters, JLabel> sitesWithParametersMapLeft;
+    private BiMap<SiteParameters, JLabel> sitesWithParametersMapRight;
     /**
      * Creates new form GamePanel
      */
     public GamePanel() {
         initComponents();
+        gamePrepare();
+    }
+
+    private void gamePrepare(){
+        climber1Icons = new ArrayList<>();
+        climber2Icons = new ArrayList<>();
+        sitesWithParametersMapLeft = HashBiMap.create();
+        sitesWithParametersMapRight = HashBiMap.create();
+
+        climber1Icons.add(climber1Icon);
+        climber1Icons.add(climber1Icon1);
+        climber1Icons.add(climber1Icon2);
+        climber2Icons.add(climber2Icon);
+        climber2Icons.add(climber2Icon1);
+        climber2Icons.add(climber2Icon2);
+
+        siteMappingMethod(sitesWithParametersMapLeft, baseLeft, secondSiteLeft, thirdSiteCRouteLeft,
+                fourthSiteCRouteLeft, fifthSiteCRouteLeft, topSiteLeft, thirdSiteLeft, fourthSiteDRouteLeft,
+                fifthSiteDRouteLeft, fourthSiteERouteLeft, fifthSiteERouteLeft);
+
+        siteMappingMethod(sitesWithParametersMapRight, baseRight, secondSiteRight, thirdSiteCRouteRight,
+                fourthSiteCRouteRight, fifthSiteCRouteRight, topSiteRight, thirdSiteRight, fourthSiteDRouteRight,
+                fifthSiteDRouteRight, fourthSiteERouteRight, fifthSiteERouteRight);
+
+    }
+
+    private void siteMappingMethod(BiMap<SiteParameters, JLabel> sitesWithParametersMap, JLabel base, JLabel secondSite,
+                                   JLabel thirdSiteCRoute, JLabel fourthSiteCRoute, JLabel fifthSiteCRoute,
+                                   JLabel topSite, JLabel thirdSite, JLabel fourthSiteDRoute, JLabel fifthSiteDRoute,
+                                   JLabel fourthSiteERoute, JLabel fifthSiteERoute) {
+        sitesWithParametersMap.put(new SiteParameters((byte) 0, Routes.E,Routes.D,Routes.C), base);
+        sitesWithParametersMap.put(new SiteParameters((byte) 1, Routes.E,Routes.D,Routes.C), secondSite);
+        sitesWithParametersMap.put(new SiteParameters((byte) 2, Routes.C), thirdSiteCRoute);
+        sitesWithParametersMap.put(new SiteParameters((byte) 3, Routes.C), fourthSiteCRoute);
+        sitesWithParametersMap.put(new SiteParameters((byte) 4, Routes.C), fifthSiteCRoute);
+        sitesWithParametersMap.put(new SiteParameters((byte) 5, Routes.E,Routes.D,Routes.C), topSite);
+
+        sitesWithParametersMap.put(new SiteParameters((byte) 2, Routes.D, Routes.E), thirdSite);
+        sitesWithParametersMap.put(new SiteParameters((byte) 3, Routes.D), fourthSiteDRoute);
+        sitesWithParametersMap.put(new SiteParameters((byte) 4, Routes.D), fifthSiteDRoute);
+
+        sitesWithParametersMap.put(new SiteParameters((byte) 4, Routes.E), fourthSiteERoute);
+        sitesWithParametersMap.put(new SiteParameters((byte) 4, Routes.E), fifthSiteERoute);
     }
 
     /**
@@ -28,8 +77,8 @@ public class GamePanel extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">
     private void initComponents() {
 
-        Climber1Icon1 = new javax.swing.JLabel();
-        Climber2Icon1 = new javax.swing.JLabel();
+        climber1Icon1 = new javax.swing.JLabel();
+        climber2Icon1 = new javax.swing.JLabel();
         acclimatizationClimber2 = new javax.swing.JProgressBar();
         acclimatizationClimber1 = new javax.swing.JProgressBar();
         jLabel1 = new javax.swing.JLabel();
@@ -72,8 +121,8 @@ public class GamePanel extends javax.swing.JPanel {
         fifthSiteERoute = new javax.swing.JPanel();
         fifthSiteERouteLeft = new javax.swing.JLabel();
         fifthSiteERouteRight = new javax.swing.JLabel();
-        Climber1Icon = new javax.swing.JLabel();
-        Climber2Icon = new javax.swing.JLabel();
+        climber1Icon = new javax.swing.JLabel();
+        climber2Icon = new javax.swing.JLabel();
         thingsList1 = new javax.swing.JComboBox<>();
         thingsList2 = new javax.swing.JComboBox<>();
         weatherIcon = new javax.swing.JLabel();
@@ -84,15 +133,18 @@ public class GamePanel extends javax.swing.JPanel {
         dayCounter = new javax.swing.JLabel();
         tempLabel = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
-        predictedAccImpactLabel = new javax.swing.JLabel();
+        predictedAccImpactClimber2Label = new javax.swing.JLabel();
+        predictedAccImpactClimber1Label = new javax.swing.JLabel();
+        climber1Icon2 = new javax.swing.JLabel();
+        climber2Icon2 = new javax.swing.JLabel();
 
         setPreferredSize(new java.awt.Dimension(1280, 1024));
 
-        Climber1Icon1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gui/Graphics/climber.png"))); // NOI18N
-        Climber1Icon1.setToolTipText("");
+        climber1Icon1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gui/Graphics/climber.png"))); // NOI18N
+        climber1Icon1.setToolTipText("");
 
-        Climber2Icon1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gui/Graphics/climber (1).png"))); // NOI18N
-        Climber2Icon1.setToolTipText("");
+        climber2Icon1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gui/Graphics/climber (1).png"))); // NOI18N
+        climber2Icon1.setToolTipText("");
 
         acclimatizationClimber2.setStringPainted(true);
 
@@ -116,7 +168,7 @@ public class GamePanel extends javax.swing.JPanel {
         baseLeft.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         baseLeft.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                baseLeftMouseClicked(evt);
+                leftSiteMouseClicked(evt);
             }
         });
 
@@ -124,7 +176,7 @@ public class GamePanel extends javax.swing.JPanel {
         baseRight.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         baseRight.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                baseRightMouseClicked(evt);
+                rightSiteMouseClicked(evt);
             }
         });
 
@@ -161,14 +213,14 @@ public class GamePanel extends javax.swing.JPanel {
         secondSiteLeft.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         secondSiteLeft.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                secondSiteLeftMouseClicked(evt);
+                leftSiteMouseClicked(evt);
             }
         });
 
         secondSiteRight.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         secondSiteRight.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                secondSiteRightMouseClicked(evt);
+                rightSiteMouseClicked(evt);
             }
         });
 
@@ -190,14 +242,14 @@ public class GamePanel extends javax.swing.JPanel {
         thirdSiteCRouteLeft.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         thirdSiteCRouteLeft.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                thirdSiteCRouteLeftMouseClicked(evt);
+                leftSiteMouseClicked(evt);
             }
         });
 
         thirdSiteCRouteRight.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         thirdSiteCRouteRight.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                thirdSiteCRouteRightMouseClicked(evt);
+                rightSiteMouseClicked(evt);
             }
         });
 
@@ -219,14 +271,14 @@ public class GamePanel extends javax.swing.JPanel {
         fourthSiteCRouteLeft.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         fourthSiteCRouteLeft.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                fourthSiteCRouteLeftMouseClicked(evt);
+                leftSiteMouseClicked(evt);
             }
         });
 
         fourthSiteCRouteRight.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         fourthSiteCRouteRight.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                fourthSiteCRouteRightMouseClicked(evt);
+                rightSiteMouseClicked(evt);
             }
         });
 
@@ -248,14 +300,14 @@ public class GamePanel extends javax.swing.JPanel {
         fifthSiteCRouteLeft.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         fifthSiteCRouteLeft.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                fifthSiteCRouteLeftMouseClicked(evt);
+                leftSiteMouseClicked(evt);
             }
         });
 
         fifthSiteCRouteRight.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         fifthSiteCRouteRight.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                fifthSiteCRouteRightMouseClicked(evt);
+                rightSiteMouseClicked(evt);
             }
         });
 
@@ -277,14 +329,14 @@ public class GamePanel extends javax.swing.JPanel {
         topSiteLeft.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         topSiteLeft.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                topSiteLeftMouseClicked(evt);
+                leftSiteMouseClicked(evt);
             }
         });
 
         topSiteRight.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         topSiteRight.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                topSiteRightMouseClicked(evt);
+                rightSiteMouseClicked(evt);
             }
         });
 
@@ -306,14 +358,14 @@ public class GamePanel extends javax.swing.JPanel {
         thirdSiteLeft.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         thirdSiteLeft.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                thirdSiteLeftMouseClicked(evt);
+                leftSiteMouseClicked(evt);
             }
         });
 
         thirdSiteRight.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         thirdSiteRight.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                thirdSiteRightMouseClicked(evt);
+                rightSiteMouseClicked(evt);
             }
         });
 
@@ -335,14 +387,14 @@ public class GamePanel extends javax.swing.JPanel {
         fourthSiteDRouteLeft.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         fourthSiteDRouteLeft.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                fourthSiteDRouteLeftMouseClicked(evt);
+                leftSiteMouseClicked(evt);
             }
         });
 
         fourthSiteDRouteRight.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         fourthSiteDRouteRight.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                fourthSiteDRouteRightMouseClicked(evt);
+                rightSiteMouseClicked(evt);
             }
         });
 
@@ -364,14 +416,14 @@ public class GamePanel extends javax.swing.JPanel {
         fifthSiteDRouteLeft.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         fifthSiteDRouteLeft.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                fifthSiteDRouteLeftMouseClicked(evt);
+                leftSiteMouseClicked(evt);
             }
         });
 
         fifthSiteDRouteRight.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         fifthSiteDRouteRight.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                fifthSiteDRouteRightMouseClicked(evt);
+                rightSiteMouseClicked(evt);
             }
         });
 
@@ -393,14 +445,14 @@ public class GamePanel extends javax.swing.JPanel {
         fourthSiteERouteLeft.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         fourthSiteERouteLeft.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                fourthSiteERouteLeftMouseClicked(evt);
+                leftSiteMouseClicked(evt);
             }
         });
 
         fourthSiteERouteRight.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         fourthSiteERouteRight.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                fourthSiteERouteRightMouseClicked(evt);
+                rightSiteMouseClicked(evt);
             }
         });
 
@@ -422,14 +474,14 @@ public class GamePanel extends javax.swing.JPanel {
         fifthSiteERouteLeft.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         fifthSiteERouteLeft.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                fifthSiteERouteLeftMouseClicked(evt);
+                leftSiteMouseClicked(evt);
             }
         });
 
         fifthSiteERouteRight.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         fifthSiteERouteRight.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                fifthSiteERouteRightMouseClicked(evt);
+                rightSiteMouseClicked(evt);
             }
         });
 
@@ -582,11 +634,11 @@ public class GamePanel extends javax.swing.JPanel {
                                         .addContainerGap(744, Short.MAX_VALUE)))
         );
 
-        Climber1Icon.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gui/Graphics/climber.png"))); // NOI18N
-        Climber1Icon.setToolTipText("");
+        climber1Icon.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gui/Graphics/climber.png"))); // NOI18N
+        climber1Icon.setToolTipText("");
 
-        Climber2Icon.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gui/Graphics/climber (1).png"))); // NOI18N
-        Climber2Icon.setToolTipText("");
+        climber2Icon.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gui/Graphics/climber (1).png"))); // NOI18N
+        climber2Icon.setToolTipText("");
 
         thingsList1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "siege backpack", "tent", "nothing" }));
         thingsList1.addItemListener(new java.awt.event.ItemListener() {
@@ -635,8 +687,17 @@ public class GamePanel extends javax.swing.JPanel {
         jLabel7.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jLabel7.setText("Predicted impact on acclimation: ");
 
-        predictedAccImpactLabel.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        predictedAccImpactLabel.setText("---");
+        predictedAccImpactClimber2Label.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        predictedAccImpactClimber2Label.setText("---");
+
+        predictedAccImpactClimber1Label.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        predictedAccImpactClimber1Label.setText("---");
+
+        climber1Icon2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gui/Graphics/climber.png"))); // NOI18N
+        climber1Icon2.setToolTipText("");
+
+        climber2Icon2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/gui/Graphics/climber (1).png"))); // NOI18N
+        climber2Icon2.setToolTipText("");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -651,200 +712,128 @@ public class GamePanel extends javax.swing.JPanel {
                                                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                                                 .addGroup(layout.createSequentialGroup()
                                                                         .addComponent(jLabel1)
-                                                                        .addGap(62, 62, 62)
+                                                                        .addGap(65, 65, 65)
                                                                         .addComponent(jLabel3))
                                                                 .addGroup(layout.createSequentialGroup()
                                                                         .addComponent(jLabel2)
-                                                                        .addGap(60, 60, 60)
+                                                                        .addGap(61, 61, 61)
                                                                         .addComponent(jLabel5))))
                                                 .addGroup(layout.createSequentialGroup()
                                                         .addGap(64, 64, 64)
-                                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                                                .addComponent(acclimatizationClimber2, javax.swing.GroupLayout.PREFERRED_SIZE, 280, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                        .addComponent(climber1Icon, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                                                 .addGroup(layout.createSequentialGroup()
-                                                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                                                                .addComponent(Climber1Icon1, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                                                .addComponent(Climber1Icon, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                                                .addComponent(Climber2Icon1, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                                                .addComponent(weatherIcon, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                                                .addGroup(layout.createSequentialGroup()
-                                                                                        .addGap(30, 30, 30)
-                                                                                        .addComponent(acclimatizationClimber1, javax.swing.GroupLayout.PREFERRED_SIZE, 280, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                                                                .addGroup(layout.createSequentialGroup()
-                                                                                        .addGap(92, 92, 92)
-                                                                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                                                                                .addComponent(thingsList1, 0, 107, Short.MAX_VALUE)
-                                                                                                .addComponent(thingsList2, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                                                                                .addGroup(layout.createSequentialGroup()
-                                                                                        .addGap(47, 47, 47)
-                                                                                        .addComponent(tampLabel)
-                                                                                        .addGap(18, 18, 18)
-                                                                                        .addComponent(tempLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE))))))
+                                                                        .addGap(92, 92, 92)
+                                                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                                                                .addComponent(thingsList1, 0, 107, Short.MAX_VALUE)
+                                                                                .addComponent(thingsList2, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                                                        .addGap(111, 111, 111))
+                                                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                                        .addComponent(acclimatizationClimber1, javax.swing.GroupLayout.PREFERRED_SIZE, 280, javax.swing.GroupLayout.PREFERRED_SIZE))))
                                                 .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                                         .addGap(64, 64, 64)
                                                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                                                 .addComponent(nextDayButton, javax.swing.GroupLayout.DEFAULT_SIZE, 360, Short.MAX_VALUE)
                                                                 .addComponent(exitButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                        .addComponent(climber1Icon1, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                        .addGroup(layout.createSequentialGroup()
+                                                                .addComponent(climber2Icon, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                                .addGap(38, 38, 38)
+                                                                .addComponent(acclimatizationClimber2, javax.swing.GroupLayout.PREFERRED_SIZE, 280, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                        .addComponent(climber2Icon1, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                        .addComponent(weatherIcon, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)))
                                         .addGroup(layout.createSequentialGroup()
                                                 .addGap(64, 64, 64)
                                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                                         .addGroup(layout.createSequentialGroup()
-                                                                .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 279, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                                .addGap(101, 101, 101)
+                                                                .addComponent(tampLabel)
                                                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                                                .addComponent(predictedAccImpactLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                                .addComponent(tempLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE))
                                                         .addGroup(layout.createSequentialGroup()
                                                                 .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                                                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                                                .addComponent(dayCounter, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                                                        .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 279, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                                        .addComponent(dayCounter, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                                                        .addComponent(climber1Icon2, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                                                        .addComponent(predictedAccImpactClimber1Label, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                                                                        .addComponent(predictedAccImpactClimber2Label, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                                                        .addComponent(climber2Icon2, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                                                .addGap(28, 28, 28)))))))
                                 .addContainerGap(56, Short.MAX_VALUE))
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                        .addContainerGap(862, Short.MAX_VALUE)
-                                        .addComponent(Climber2Icon, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(368, 368, 368)))
         );
         layout.setVerticalGroup(
                 layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGroup(layout.createSequentialGroup()
-                                .addGap(59, 59, 59)
+                                .addGap(35, 35, 35)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                        .addComponent(jLabel3)
-                                        .addComponent(jLabel1))
-                                .addGap(28, 28, 28)
+                                        .addComponent(jLabel1)
+                                        .addComponent(jLabel3))
+                                .addGap(18, 18, 18)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                         .addComponent(acclimatizationClimber1, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(Climber1Icon))
-                                .addGap(17, 17, 17)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                        .addComponent(climber1Icon))
+                                .addGap(18, 18, 18)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                         .addComponent(jLabel2)
                                         .addComponent(jLabel5))
-                                .addGap(29, 29, 29)
-                                .addComponent(acclimatizationClimber2, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(88, 88, 88)
+                                .addGap(18, 18, 18)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                        .addComponent(Climber1Icon1)
+                                        .addComponent(acclimatizationClimber2, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(climber2Icon))
+                                .addGap(67, 67, 67)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                        .addComponent(climber1Icon1)
                                         .addComponent(thingsList1, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(41, 41, 41)
+                                .addGap(49, 49, 49)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                        .addComponent(Climber2Icon1)
+                                        .addComponent(climber2Icon1)
                                         .addComponent(thingsList2, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(43, 43, 43)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                        .addComponent(weatherIcon, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(tampLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(tempLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addGap(26, 26, 26)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                        .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(dayCounter, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(18, 18, 18)
+                                .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(climber1Icon2)
+                                        .addComponent(climber2Icon2))
+                                .addGap(18, 18, 18)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                         .addGroup(layout.createSequentialGroup()
-                                                .addGap(65, 65, 65)
-                                                .addComponent(weatherIcon, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                .addComponent(predictedAccImpactClimber1Label, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                .addComponent(nextDayButton, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addGap(18, 18, 18)
+                                                .addComponent(exitButton, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addGap(50, 50, 50))
                                         .addGroup(layout.createSequentialGroup()
-                                                .addGap(83, 83, 83)
-                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                                        .addComponent(tampLabel)
-                                                        .addComponent(tempLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                                .addGap(52, 52, 52)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                        .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, 41, Short.MAX_VALUE)
-                                        .addComponent(dayCounter, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                .addGap(18, 18, 18)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                        .addComponent(predictedAccImpactLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, 32, Short.MAX_VALUE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(nextDayButton, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(exitButton, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(50, 50, 50))
+                                                .addComponent(predictedAccImpactClimber2Label, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                         .addComponent(jLayeredPane1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addGroup(layout.createSequentialGroup()
-                                        .addGap(219, 219, 219)
-                                        .addComponent(Climber2Icon, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addGap(755, 755, 755)))
         );
     }// </editor-fold>
 
-    private void baseRightMouseClicked(java.awt.event.MouseEvent evt) {
-        System.out.println("neatbins ty kurwo jesbana");
-    }
-
-    private void baseLeftMouseClicked(java.awt.event.MouseEvent evt) {
+    private void rightSiteMouseClicked(java.awt.event.MouseEvent evt) {
         // TODO add your handling code here:
     }
 
-    private void secondSiteRightMouseClicked(java.awt.event.MouseEvent evt) {
-        // TODO add your handling code here:
-    }
-
-    private void secondSiteLeftMouseClicked(java.awt.event.MouseEvent evt) {
-        // TODO add your handling code here:
-    }
-
-    private void thirdSiteCRouteLeftMouseClicked(java.awt.event.MouseEvent evt) {
-        // TODO add your handling code here:
-    }
-
-    private void thirdSiteCRouteRightMouseClicked(java.awt.event.MouseEvent evt) {
-        // TODO add your handling code here:
-    }
-
-    private void fourthSiteCRouteLeftMouseClicked(java.awt.event.MouseEvent evt) {
-        // TODO add your handling code here:
-    }
-
-    private void fourthSiteCRouteRightMouseClicked(java.awt.event.MouseEvent evt) {
-        // TODO add your handling code here:
-    }
-
-    private void fifthSiteCRouteLeftMouseClicked(java.awt.event.MouseEvent evt) {
-        // TODO add your handling code here:
-    }
-
-    private void fifthSiteCRouteRightMouseClicked(java.awt.event.MouseEvent evt) {
-        // TODO add your handling code here:
-    }
-
-    private void topSiteLeftMouseClicked(java.awt.event.MouseEvent evt) {
-        // TODO add your handling code here:
-    }
-
-    private void topSiteRightMouseClicked(java.awt.event.MouseEvent evt) {
-        // TODO add your handling code here:
-    }
-
-    private void fifthSiteDRouteLeftMouseClicked(java.awt.event.MouseEvent evt) {
-        // TODO add your handling code here:
-    }
-
-    private void fifthSiteDRouteRightMouseClicked(java.awt.event.MouseEvent evt) {
-        // TODO add your handling code here:
-    }
-
-    private void fourthSiteDRouteLeftMouseClicked(java.awt.event.MouseEvent evt) {
-        // TODO add your handling code here:
-    }
-
-    private void fourthSiteDRouteRightMouseClicked(java.awt.event.MouseEvent evt) {
-        // TODO add your handling code here:
-    }
-
-    private void thirdSiteLeftMouseClicked(java.awt.event.MouseEvent evt) {
-        // TODO add your handling code here:
-    }
-
-    private void thirdSiteRightMouseClicked(java.awt.event.MouseEvent evt) {
-        // TODO add your handling code here:
-    }
-
-    private void fourthSiteERouteLeftMouseClicked(java.awt.event.MouseEvent evt) {
-        // TODO add your handling code here:
-    }
-
-    private void fourthSiteERouteRightMouseClicked(java.awt.event.MouseEvent evt) {
-        // TODO add your handling code here:
-    }
-
-    private void fifthSiteERouteLeftMouseClicked(java.awt.event.MouseEvent evt) {
-        // TODO add your handling code here:
-    }
-
-    private void fifthSiteERouteRightMouseClicked(java.awt.event.MouseEvent evt) {
+    private void leftSiteMouseClicked(java.awt.event.MouseEvent evt) {
         // TODO add your handling code here:
     }
 
@@ -866,10 +855,12 @@ public class GamePanel extends javax.swing.JPanel {
 
 
     // Variables declaration - do not modify
-    private javax.swing.JLabel Climber1Icon;
-    private javax.swing.JLabel Climber1Icon1;
-    private javax.swing.JLabel Climber2Icon;
-    private javax.swing.JLabel Climber2Icon1;
+    private javax.swing.JLabel climber1Icon;
+    private javax.swing.JLabel climber1Icon1;
+    private javax.swing.JLabel climber1Icon2;
+    private javax.swing.JLabel climber2Icon;
+    private javax.swing.JLabel climber2Icon1;
+    private javax.swing.JLabel climber2Icon2;
     private javax.swing.JProgressBar acclimatizationClimber1;
     private javax.swing.JProgressBar acclimatizationClimber2;
     private javax.swing.JLabel baseLeft;
@@ -905,7 +896,8 @@ public class GamePanel extends javax.swing.JPanel {
     private javax.swing.JLayeredPane jLayeredPane1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JButton nextDayButton;
-    private javax.swing.JLabel predictedAccImpactLabel;
+    private javax.swing.JLabel predictedAccImpactClimber1Label;
+    private javax.swing.JLabel predictedAccImpactClimber2Label;
     private javax.swing.JPanel secondSite;
     private javax.swing.JLabel secondSiteLeft;
     private javax.swing.JLabel secondSiteRight;
