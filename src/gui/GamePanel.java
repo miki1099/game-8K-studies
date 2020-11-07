@@ -3,6 +3,7 @@ package gui;
 import gameLogic.GameLogic;
 import gameLogic.Routes;
 import gameLogic.SiteParameters;
+import gameLogic.WeatherType;
 
 import javax.swing.*;
 import javax.swing.border.BevelBorder;
@@ -28,6 +29,9 @@ public class GamePanel extends javax.swing.JPanel {
     private final Icon ICON_CLIMBER_2 = new ImageIcon(getClass().getResource("/gui/Graphics/climber (1).png"));
     private final Icon ICON_CLIMBER_1_DEAD = new ImageIcon(getClass().getResource("/gui/Graphics/climber dead.png"));
     private final Icon ICON_CLIMBER_2_DEAD = new ImageIcon(getClass().getResource("/gui/Graphics/climber (1) dead.png"));
+    private final Icon ICON_SUN = new ImageIcon(getClass().getResource("/gui/Graphics/sunny.png"));
+    private final Icon ICON_CLOUDS = new ImageIcon(getClass().getResource("/gui/Graphics/clouds.png"));
+    private final Icon ICON_SNOW = new ImageIcon(getClass().getResource("/gui/Graphics/snow.png"));
     /**
      *
      * Creates new form GamePanel
@@ -36,6 +40,8 @@ public class GamePanel extends javax.swing.JPanel {
         initComponents();
         gamePrepare();
         constructGameLogicInstance();
+        updateClimbersStatus();
+        updateWeather();
     }
 
     private void constructGameLogicInstance(){
@@ -853,8 +859,15 @@ public class GamePanel extends javax.swing.JPanel {
         );
     }// </editor-fold>
 
-    private void updateIcon(){
 
+
+    // added mehtods
+
+    private void updateIcon(Icon icon, List<JLabel> labels, JLabel currPos){
+        currPos.setIcon(icon);
+        for(JLabel label : labels){
+            label.setIcon(icon);
+        }
     }
 
     private void updateClimbersStatus(){
@@ -870,7 +883,32 @@ public class GamePanel extends javax.swing.JPanel {
 
         counter = 0;
 
+        for(boolean isAlive : gameLogic.checkClimbersAreAlive()){
+            if(counter == 0 && !isAlive){
+                JLabel currPos = gameLogic.getCurrentClimbersPosition().get(counter);
+                updateIcon(ICON_CLIMBER_1_DEAD,  climber1Icons, currPos);
+            } else if(counter == 1&& !isAlive){
+                JLabel currPos = gameLogic.getCurrentClimbersPosition().get(counter);
+                updateIcon(ICON_CLIMBER_2_DEAD,  climber2Icons, currPos);
+            }
+            counter++;
+        }
+    }
 
+    private void updateWeather(){
+        WeatherType weatherType = gameLogic.getWeatherType();
+        tempLabel.setText(gameLogic.getTemperature()+"");
+        switch (weatherType){
+            case SUN:
+                weatherIcon.setIcon(ICON_SUN);
+                break;
+            case CLOUDS:
+                weatherIcon.setIcon(ICON_CLOUDS);
+                break;
+            case SNOW:
+                weatherIcon.setIcon(ICON_SNOW);
+                break;
+        }
     }
 
     private void makeReadyToMove(JLabel componentClicked){

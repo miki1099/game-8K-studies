@@ -22,6 +22,10 @@ public class SiteParameters {
 
     public byte impactFromMove(SiteParameters destination){
         byte impactMod = 0;
+        if(this.level == destination.level){
+            return (byte) 0;
+        }
+
         if(this.route.contains(Routes.C) && this.level >= 2){
             impactMod = -5;
         } else if(this.route.contains(Routes.D) && this.level >= 3){
