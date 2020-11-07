@@ -24,8 +24,10 @@ public class GamePanel extends javax.swing.JPanel {
     private Map<JLabel, SiteParameters> sitesWithParametersMapRight;
     private boolean isGoingToMoveClimber;
     private JLabel currentPositionReadyToMove;
-    private Icon iconClimber1 = new ImageIcon(getClass().getResource("/gui/Graphics/climber.png"));
-    private Icon iconClimber2 = new ImageIcon(getClass().getResource("/gui/Graphics/climber (1).png"));
+    private final Icon ICON_CLIMBER_1 = new ImageIcon(getClass().getResource("/gui/Graphics/climber.png"));
+    private final Icon ICON_CLIMBER_2 = new ImageIcon(getClass().getResource("/gui/Graphics/climber (1).png"));
+    private final Icon ICON_CLIMBER_1_DEAD = new ImageIcon(getClass().getResource("/gui/Graphics/climber dead.png"));
+    private final Icon ICON_CLIMBER_2_DEAD = new ImageIcon(getClass().getResource("/gui/Graphics/climber (1) dead.png"));
     /**
      *
      * Creates new form GamePanel
@@ -163,9 +165,9 @@ public class GamePanel extends javax.swing.JPanel {
         setPreferredSize(new java.awt.Dimension(1280, 1024));
 
 
-        climber1Icon1.setIcon(iconClimber1); // NOI18N
+        climber1Icon1.setIcon(ICON_CLIMBER_1); // NOI18N
         climber1Icon1.setToolTipText("");
-        climber2Icon1.setIcon(iconClimber2); // NOI18N
+        climber2Icon1.setIcon(ICON_CLIMBER_2); // NOI18N
         climber2Icon1.setToolTipText("");
 
         acclimatizationClimber2.setStringPainted(true);
@@ -186,7 +188,7 @@ public class GamePanel extends javax.swing.JPanel {
 
         jLayeredPane1.setPreferredSize(new java.awt.Dimension(800, 1024));
 
-        baseLeft.setIcon(iconClimber1); // NOI18N
+        baseLeft.setIcon(ICON_CLIMBER_1); // NOI18N
         baseLeft.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         baseLeft.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mousePressed(java.awt.event.MouseEvent evt) {
@@ -194,7 +196,7 @@ public class GamePanel extends javax.swing.JPanel {
             }
         });
 
-        baseRight.setIcon(iconClimber2); // NOI18N
+        baseRight.setIcon(ICON_CLIMBER_2); // NOI18N
         baseRight.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         baseRight.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mousePressed(java.awt.event.MouseEvent evt){
@@ -656,10 +658,10 @@ public class GamePanel extends javax.swing.JPanel {
                                         .addContainerGap(744, Short.MAX_VALUE)))
         );
 
-        climber1Icon.setIcon(iconClimber1); // NOI18N
+        climber1Icon.setIcon(ICON_CLIMBER_1); // NOI18N
         climber1Icon.setToolTipText("");
 
-        climber2Icon.setIcon(iconClimber2); // NOI18N
+        climber2Icon.setIcon(ICON_CLIMBER_2); // NOI18N
         climber2Icon.setToolTipText("");
 
         thingsList1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "siege backpack", "tent", "nothing" }));
@@ -715,10 +717,10 @@ public class GamePanel extends javax.swing.JPanel {
         predictedAccImpactClimber1Label.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         predictedAccImpactClimber1Label.setText("---");
 
-        climber1Icon2.setIcon(iconClimber1); // NOI18N
+        climber1Icon2.setIcon(ICON_CLIMBER_1); // NOI18N
         climber1Icon2.setToolTipText("");
 
-        climber2Icon2.setIcon(iconClimber2); // NOI18N
+        climber2Icon2.setIcon(ICON_CLIMBER_2); // NOI18N
         climber2Icon2.setToolTipText("");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -851,6 +853,26 @@ public class GamePanel extends javax.swing.JPanel {
         );
     }// </editor-fold>
 
+    private void updateIcon(){
+
+    }
+
+    private void updateClimbersStatus(){
+        int counter = 0;
+        for(byte acclimation : gameLogic.getClimbersAcclimation()){
+            if(counter == 0){
+                acclimatizationClimber1.setValue(acclimation);
+            } else if(counter == 1){
+                acclimatizationClimber2.setValue(acclimation);
+            }
+            counter++;
+        }
+
+        counter = 0;
+
+
+    }
+
     private void makeReadyToMove(JLabel componentClicked){
         if(gameLogic.getCurrentClimbersPosition().contains(componentClicked)){
             isGoingToMoveClimber = true;
@@ -879,6 +901,7 @@ public class GamePanel extends javax.swing.JPanel {
                 makeUnreadyToMove();
             } else {
                 makeMove(componentClicked, sitesWithParametersMap);
+                updateClimbersStatus();
             }
         } else {
             makeReadyToMove(componentClicked);
@@ -898,7 +921,13 @@ public class GamePanel extends javax.swing.JPanel {
     }
 
     private void exitButtonActionPerformed(java.awt.event.ActionEvent evt) {
-        // TODO add your handling code here:
+        int ans = JOptionPane.showConfirmDialog(this,
+                "Do you want exit game?\nAll progress will be reset!",
+                "Confirm operation", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+
+        if(ans == JOptionPane.YES_OPTION){
+            Window.exitToMenu();
+        }
     }
 
     private void thingsList1ItemStateChanged(java.awt.event.ItemEvent evt) {

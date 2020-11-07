@@ -61,8 +61,6 @@ public class Window extends javax.swing.JFrame {
         Window window = getInstance();
         menuPanel = MenuPanel.getInstance();
         menuPanel.setVisible(true);
-//        gamePanel = new GamePanel();
-//        gamePanel.setVisible(false);
         window.add(menuPanel);
 
         window.setVisible(true);
@@ -75,6 +73,15 @@ public class Window extends javax.swing.JFrame {
         WINDOW.add(gamePanel);
         gamePanel.setVisible(true);
     }
+
+    public static void exitToMenu(){
+        gamePanel.setVisible(false);
+        WINDOW.remove(gamePanel);
+        gamePanel = null;
+        WINDOW.add(menuPanel);
+        menuPanel.setVisible(true);
+    }
+
     // Variables declaration - do not modify
     // End of variables declaration
 }

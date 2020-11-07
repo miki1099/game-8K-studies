@@ -24,7 +24,47 @@ public class GameLogic {
     private void initGame(List<JLabel> currentPositions, List<SiteParameters> siteParameters){
         climbers = new ArrayList<>();
         for(int i = 0; i < currentPositions.size(); i++){
-            climbers.add(Climber.builder().currentPosition(currentPositions.get(i)).siteParameters(siteParameters.get(i)).build());
+            climbers.add(Climber.builder()
+                    .currentPosition(currentPositions.get(i))
+                    .siteParameters(siteParameters.get(i))
+                    .acclimation((byte) 20)
+                    .isAlive(true)
+                    .build());
+        }
+
+    }
+
+    public List<Byte> getClimbersAcclimation(){
+        List<Byte> accList = new ArrayList<>();
+        for (Climber climber : climbers){
+            accList.add(climber.getAcclimation());
+        }
+        return accList;
+    }
+
+    public List<Boolean> checkClimbersAreAlive(){
+        List<Boolean> aliveList = new ArrayList<>();
+        for (Climber climber : climbers){
+            aliveList.add(climber.isAlive());
+        }
+        return aliveList;
+    }
+
+
+    public boolean moveClimberAndShowResults(Map<JLabel, SiteParameters> sitesMap, JLabel siteToGo, JLabel currentPosition){
+        Climber climberToMove = getClimberWithSpecificLocation(currentPosition);
+        if(climberToMove == null) return false;
+
+        SiteParameters siteParametersToMove = sitesMap.get(siteToGo);
+        SiteParameters currSiteParameters = climberToMove.getSiteParameters();
+        if(siteParametersToMove.isLegalToMove(currSiteParameters)){
+            climberToMove.setCurrentPosition(siteToGo);
+            climberToMove.setSiteParameters(siteParametersToMove);
+            byte impactFromMove = currSiteParameters.impactFromMove(siteParametersToMove);
+            makeImpactOnClimber(climberToMove, impactFromMove);
+            return true;
+        } else {
+            return false;
         }
 
     }
@@ -38,22 +78,13 @@ public class GameLogic {
         return null;
     }
 
-    public boolean moveClimberAndShowResults(Map<JLabel, SiteParameters> sitesMap, JLabel siteToGo, JLabel currentPosition){
-        Climber climberToMove = getClimberWithSpecificLocation(currentPosition);
-        if(climberToMove == null) return false;
-
-        SiteParameters siteParametersToMove = sitesMap.get(siteToGo);
-
-        if(siteParametersToMove.isLegalToMove(climberToMove.getSiteParameters())){
-            climberToMove.setCurrentPosition(siteToGo);
-            climberToMove.setSiteParameters(siteParametersToMove);
-            return true;
-        } else {
-            return false;
+    public void makeImpactOnClimber(Climber climber, byte impact){
+        byte acc = (byte) (climber.getAcclimation() + impact);
+        climber.setAcclimation(acc);
+        if(acc <= 0){
+            climber.setAlive(false);
         }
-
     }
-
 
     public List<JLabel> getCurrentClimbersPosition(){
         List<JLabel> currPos= new ArrayList<>();

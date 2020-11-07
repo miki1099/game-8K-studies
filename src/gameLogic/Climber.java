@@ -11,4 +11,6 @@ import javax.swing.*;
 class Climber {
     private JLabel currentPosition;
     private SiteParameters siteParameters;
+    private byte acclimation;
+    private boolean isAlive;
 }
