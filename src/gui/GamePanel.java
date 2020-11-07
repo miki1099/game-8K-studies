@@ -7,9 +7,10 @@ import gameLogic.SiteParameters;
 import javax.swing.*;
 import javax.swing.border.BevelBorder;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-import com.google.common.collect.BiMap;
-import com.google.common.collect.HashBiMap;
+import java.util.Map;
+
 
 /**
  *
@@ -19,8 +20,8 @@ public class GamePanel extends javax.swing.JPanel {
     private GameLogic gameLogic;
     private List<JLabel> climber1Icons;
     private List<JLabel> climber2Icons;
-    private BiMap<SiteParameters, JLabel> sitesWithParametersMapLeft;
-    private BiMap<SiteParameters, JLabel> sitesWithParametersMapRight;
+    private Map<JLabel, SiteParameters> sitesWithParametersMapLeft;
+    private Map<JLabel, SiteParameters> sitesWithParametersMapRight;
     private boolean isGoingToMoveClimber;
     private JLabel currentPositionReadyToMove;
     private Icon iconClimber1 = new ImageIcon(getClass().getResource("/gui/Graphics/climber.png"));
@@ -48,8 +49,8 @@ public class GamePanel extends javax.swing.JPanel {
     private void gamePrepare(){
         climber1Icons = new ArrayList<>();
         climber2Icons = new ArrayList<>();
-        sitesWithParametersMapLeft = HashBiMap.create();
-        sitesWithParametersMapRight = HashBiMap.create();
+        sitesWithParametersMapLeft = new HashMap<>();
+        sitesWithParametersMapRight = new HashMap<>();
 
         isGoingToMoveClimber = false;
 
@@ -70,23 +71,23 @@ public class GamePanel extends javax.swing.JPanel {
 
     }
 
-    private void siteMappingMethod(BiMap<SiteParameters, JLabel> sitesWithParametersMap, JLabel base, JLabel secondSite,
+    private void siteMappingMethod(Map<JLabel, SiteParameters> sitesWithParametersMap, JLabel base, JLabel secondSite,
                                    JLabel thirdSiteCRoute, JLabel fourthSiteCRoute, JLabel fifthSiteCRoute,
                                    JLabel topSite, JLabel thirdSite, JLabel fourthSiteDRoute, JLabel fifthSiteDRoute,
                                    JLabel fourthSiteERoute, JLabel fifthSiteERoute) {
-        sitesWithParametersMap.put(new SiteParameters((byte) 0, Routes.E,Routes.D,Routes.C), base);
-        sitesWithParametersMap.put(new SiteParameters((byte) 1, Routes.E,Routes.D,Routes.C), secondSite);
-        sitesWithParametersMap.put(new SiteParameters((byte) 2, Routes.C), thirdSiteCRoute);
-        sitesWithParametersMap.put(new SiteParameters((byte) 3, Routes.C), fourthSiteCRoute);
-        sitesWithParametersMap.put(new SiteParameters((byte) 4, Routes.C), fifthSiteCRoute);
-        sitesWithParametersMap.put(new SiteParameters((byte) 5, Routes.E,Routes.D,Routes.C), topSite);
+        sitesWithParametersMap.put(base, new SiteParameters((byte) 0, Routes.E,Routes.D,Routes.C));
+        sitesWithParametersMap.put(secondSite, new SiteParameters((byte) 1, Routes.E,Routes.D,Routes.C));
+        sitesWithParametersMap.put(thirdSiteCRoute, new SiteParameters((byte) 2, Routes.C));
+        sitesWithParametersMap.put(fourthSiteCRoute, new SiteParameters((byte) 3, Routes.C));
+        sitesWithParametersMap.put(fifthSiteCRoute, new SiteParameters((byte) 4, Routes.C));
+        sitesWithParametersMap.put(topSite, new SiteParameters((byte) 5, Routes.E,Routes.D,Routes.C));
 
-        sitesWithParametersMap.put(new SiteParameters((byte) 2, Routes.D, Routes.E), thirdSite);
-        sitesWithParametersMap.put(new SiteParameters((byte) 3, Routes.D), fourthSiteDRoute);
-        sitesWithParametersMap.put(new SiteParameters((byte) 4, Routes.D), fifthSiteDRoute);
+        sitesWithParametersMap.put(thirdSite, new SiteParameters((byte) 2, Routes.D, Routes.E));
+        sitesWithParametersMap.put(fourthSiteDRoute, new SiteParameters((byte) 3, Routes.D));
+        sitesWithParametersMap.put(fifthSiteDRoute, new SiteParameters((byte) 4, Routes.D));
 
-        sitesWithParametersMap.put(new SiteParameters((byte) 3, Routes.E), fourthSiteERoute);
-        sitesWithParametersMap.put(new SiteParameters((byte) 4, Routes.E), fifthSiteERoute);
+        sitesWithParametersMap.put(fourthSiteERoute, new SiteParameters((byte) 3, Routes.E));
+        sitesWithParametersMap.put(fifthSiteERoute, new SiteParameters((byte) 4, Routes.E));
     }
 
     /**
@@ -188,7 +189,7 @@ public class GamePanel extends javax.swing.JPanel {
         baseLeft.setIcon(iconClimber1); // NOI18N
         baseLeft.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         baseLeft.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
                 leftSiteMouseClicked(evt, baseLeft);
             }
         });
@@ -196,7 +197,7 @@ public class GamePanel extends javax.swing.JPanel {
         baseRight.setIcon(iconClimber2); // NOI18N
         baseRight.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         baseRight.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
+            public void mousePressed(java.awt.event.MouseEvent evt){
                 rightSiteMouseClicked(evt, baseRight);
             }
         });
@@ -233,14 +234,14 @@ public class GamePanel extends javax.swing.JPanel {
 
         secondSiteLeft.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         secondSiteLeft.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
                 leftSiteMouseClicked(evt, secondSiteLeft);
             }
         });
 
         secondSiteRight.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         secondSiteRight.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
                 rightSiteMouseClicked(evt, secondSiteRight);
             }
         });
@@ -262,14 +263,14 @@ public class GamePanel extends javax.swing.JPanel {
 
         thirdSiteCRouteLeft.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         thirdSiteCRouteLeft.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
                 leftSiteMouseClicked(evt, thirdSiteCRouteLeft);
             }
         });
 
         thirdSiteCRouteRight.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         thirdSiteCRouteRight.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
                 rightSiteMouseClicked(evt, thirdSiteCRouteRight);
             }
         });
@@ -291,14 +292,14 @@ public class GamePanel extends javax.swing.JPanel {
 
         fourthSiteCRouteLeft.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         fourthSiteCRouteLeft.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
                 leftSiteMouseClicked(evt, fourthSiteCRouteLeft);
             }
         });
 
         fourthSiteCRouteRight.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         fourthSiteCRouteRight.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
                 rightSiteMouseClicked(evt, fourthSiteCRouteRight);
             }
         });
@@ -320,14 +321,14 @@ public class GamePanel extends javax.swing.JPanel {
 
         fifthSiteCRouteLeft.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         fifthSiteCRouteLeft.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
                 leftSiteMouseClicked(evt, fifthSiteCRouteLeft);
             }
         });
 
         fifthSiteCRouteRight.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         fifthSiteCRouteRight.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
                 rightSiteMouseClicked(evt, fifthSiteCRouteRight);
             }
         });
@@ -349,14 +350,14 @@ public class GamePanel extends javax.swing.JPanel {
 
         topSiteLeft.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         topSiteLeft.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
                 leftSiteMouseClicked(evt, topSiteLeft);
             }
         });
 
         topSiteRight.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         topSiteRight.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
                 rightSiteMouseClicked(evt, topSiteRight);
             }
         });
@@ -378,14 +379,14 @@ public class GamePanel extends javax.swing.JPanel {
 
         thirdSiteLeft.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         thirdSiteLeft.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
                 leftSiteMouseClicked(evt, thirdSiteLeft);
             }
         });
 
         thirdSiteRight.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         thirdSiteRight.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
                 rightSiteMouseClicked(evt, thirdSiteRight);
             }
         });
@@ -407,14 +408,14 @@ public class GamePanel extends javax.swing.JPanel {
 
         fourthSiteDRouteLeft.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         fourthSiteDRouteLeft.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
                 leftSiteMouseClicked(evt,fourthSiteDRouteLeft);
             }
         });
 
         fourthSiteDRouteRight.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         fourthSiteDRouteRight.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
                 rightSiteMouseClicked(evt, fourthSiteDRouteRight);
             }
         });
@@ -436,14 +437,14 @@ public class GamePanel extends javax.swing.JPanel {
 
         fifthSiteDRouteLeft.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         fifthSiteDRouteLeft.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
                 leftSiteMouseClicked(evt, fifthSiteDRouteLeft);
             }
         });
 
         fifthSiteDRouteRight.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         fifthSiteDRouteRight.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
                 rightSiteMouseClicked(evt, fifthSiteDRouteRight);
             }
         });
@@ -465,14 +466,14 @@ public class GamePanel extends javax.swing.JPanel {
 
         fourthSiteERouteLeft.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         fourthSiteERouteLeft.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
                 leftSiteMouseClicked(evt, fourthSiteERouteLeft);
             }
         });
 
         fourthSiteERouteRight.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         fourthSiteERouteRight.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
                 rightSiteMouseClicked(evt, fourthSiteERouteRight);
             }
         });
@@ -494,14 +495,14 @@ public class GamePanel extends javax.swing.JPanel {
 
         fifthSiteERouteLeft.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         fifthSiteERouteLeft.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
                 leftSiteMouseClicked(evt, fifthSiteERouteLeft);
             }
         });
 
         fifthSiteERouteRight.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         fifthSiteERouteRight.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
                 rightSiteMouseClicked(evt, fifthSiteERouteRight);
             }
         });
@@ -864,17 +865,15 @@ public class GamePanel extends javax.swing.JPanel {
         currentPositionReadyToMove = null;
     }
 
-    private void makeMove(JLabel componentClicked, BiMap<SiteParameters, JLabel> sitesWithParametersMap){
+    private void makeMove(JLabel componentClicked, Map<JLabel, SiteParameters> sitesWithParametersMap){
         if(gameLogic.moveClimberAndShowResults(sitesWithParametersMap, componentClicked, currentPositionReadyToMove)){
             componentClicked.setIcon(currentPositionReadyToMove.getIcon());
             currentPositionReadyToMove.setIcon(null);
-            makeUnreadyToMove();
-        } else{
-            makeUnreadyToMove();
         }
+        makeUnreadyToMove();
     }
 
-    private void clickOperation(JLabel componentClicked, BiMap<SiteParameters, JLabel> sitesWithParametersMap){
+    private void clickOperation(JLabel componentClicked, Map<JLabel, SiteParameters> sitesWithParametersMap){
         if(isGoingToMoveClimber){
             if(gameLogic.getCurrentClimbersPosition().contains(componentClicked)){
                 makeUnreadyToMove();

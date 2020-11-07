@@ -1,18 +1,16 @@
 package gameLogic;
 
-import com.google.common.collect.BiMap;
 
 import javax.swing.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class GameLogic {
     private static GameLogic gameLogic;
     private List<Climber> climbers;
     private Weather weather;
     private short days;
-    private byte climber1Height;
-    private byte climber2Height;
 
     private GameLogic(List<JLabel> currentPositions, List<SiteParameters> siteParameters) {
         initGame(currentPositions, siteParameters);
@@ -40,15 +38,15 @@ public class GameLogic {
         return null;
     }
 
-    public boolean moveClimberAndShowResults(BiMap<SiteParameters, JLabel> sitesMap, JLabel siteToGo, JLabel currentPosition){
+    public boolean moveClimberAndShowResults(Map<JLabel, SiteParameters> sitesMap, JLabel siteToGo, JLabel currentPosition){
         Climber climberToMove = getClimberWithSpecificLocation(currentPosition);
         if(climberToMove == null) return false;
 
-        SiteParameters siteParamitersToMove = sitesMap.inverse().get(siteToGo);
+        SiteParameters siteParametersToMove = sitesMap.get(siteToGo);
 
-        if(siteParamitersToMove.isLegalToMove(climberToMove.getSiteParameters())){
+        if(siteParametersToMove.isLegalToMove(climberToMove.getSiteParameters())){
             climberToMove.setCurrentPosition(siteToGo);
-            climberToMove.setSiteParameters(siteParamitersToMove);
+            climberToMove.setSiteParameters(siteParametersToMove);
             return true;
         } else {
             return false;
