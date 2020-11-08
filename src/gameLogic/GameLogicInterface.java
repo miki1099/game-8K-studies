@@ -14,5 +14,8 @@ public interface GameLogicInterface {
     public List<JLabel> getCurrentClimbersPosition();
     public byte getTemperature();
     public WeatherType getWeatherType();
+    public List<Byte> getImpactForNextDay();
+    public void makeNextDay();
+    public short getDay();
 
 }

@@ -42,6 +42,7 @@ public class GamePanel extends javax.swing.JPanel {
         constructGameLogicInstance();
         updateClimbersStatus();
         updateWeather();
+        updatePredictedImpact();
     }
 
     private void constructGameLogicInstance(){
@@ -68,11 +69,11 @@ public class GamePanel extends javax.swing.JPanel {
         climber2Icons.add(climber2Icon);
         climber2Icons.add(climber2Icon1);
         climber2Icons.add(climber2Icon2);
-
+        //mapping left sides
         siteMappingMethod(sitesWithParametersMapLeft, baseLeft, secondSiteLeft, thirdSiteCRouteLeft,
                 fourthSiteCRouteLeft, fifthSiteCRouteLeft, topSiteLeft, thirdSiteLeft, fourthSiteDRouteLeft,
                 fifthSiteDRouteLeft, fourthSiteERouteLeft, fifthSiteERouteLeft);
-
+        //mapping right sides
         siteMappingMethod(sitesWithParametersMapRight, baseRight, secondSiteRight, thirdSiteCRouteRight,
                 fourthSiteCRouteRight, fifthSiteCRouteRight, topSiteRight, thirdSiteRight, fourthSiteDRouteRight,
                 fifthSiteDRouteRight, fourthSiteERouteRight, fifthSiteERouteRight);
@@ -863,6 +864,7 @@ public class GamePanel extends javax.swing.JPanel {
 
     // added mehtods
 
+    //start update methods block
     private void updateIcon(Icon icon, List<JLabel> labels, JLabel currPos){
         currPos.setIcon(icon);
         for(JLabel label : labels){
@@ -911,6 +913,18 @@ public class GamePanel extends javax.swing.JPanel {
         }
     }
 
+    private void updatePredictedImpact(){
+        List<Byte> nightImpactList = gameLogic.getImpactForNextDay();
+        predictedAccImpactClimber1Label.setText(nightImpactList.get(0)+"");
+        predictedAccImpactClimber2Label.setText(nightImpactList.get(1)+"");
+    }
+
+    private void updateDayCounter(){
+        dayCounter.setText(gameLogic.getDay()+"");
+    }
+    //end update methods block
+
+    //start moving methods block
     private void makeReadyToMove(JLabel componentClicked){
         if(gameLogic.getCurrentClimbersPosition().contains(componentClicked)){
             isGoingToMoveClimber = true;
@@ -940,22 +954,28 @@ public class GamePanel extends javax.swing.JPanel {
             } else {
                 makeMove(componentClicked, sitesWithParametersMap);
                 updateClimbersStatus();
+                updatePredictedImpact();
             }
         } else {
             makeReadyToMove(componentClicked);
         }
     }
+    // end moving methods
 
+    // invoke move operation
     private void rightSiteMouseClicked(java.awt.event.MouseEvent evt, JLabel componentClicked) {
         clickOperation(componentClicked, sitesWithParametersMapRight);
     }
-
+    // invoke move operation
     private void leftSiteMouseClicked(java.awt.event.MouseEvent evt, JLabel componentClicked) {
         clickOperation(componentClicked, sitesWithParametersMapLeft);
     }
 
     private void nextDayButtonActionPerformed(java.awt.event.ActionEvent evt) {
-        // TODO add your handling code here:
+        gameLogic.makeNextDay();
+        updateWeather();
+        updateDayCounter();
+        updateClimbersStatus();
     }
 
     private void exitButtonActionPerformed(java.awt.event.ActionEvent evt) {

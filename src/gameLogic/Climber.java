@@ -13,4 +13,5 @@ class Climber {
     private SiteParameters siteParameters;
     private byte acclimation;
     private boolean isAlive;
+    private byte movesInOneDay;
 }

@@ -54,4 +54,22 @@ public class SiteParameters {
         }
     }
 
+    public byte getImpactFromSiteNextDay(){
+        switch (this.level){
+            case 0:
+                return 20;
+            case 1:
+                return 10;
+            case 2:
+                return 0;
+            case 3:
+                return -5;
+            case 4:
+                return -20;
+            case 5:
+                return -35;
+        }
+        return 0;
+    }
+
 }
