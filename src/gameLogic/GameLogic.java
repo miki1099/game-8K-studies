@@ -63,7 +63,7 @@ public class GameLogic implements GameLogicInterface{
     }
 
     @Override
-    public boolean moveClimberAndShowResults(Map<JLabel, SiteParameters> sitesMap, JLabel siteToGo, JLabel currentPosition){
+    public boolean moveClimberAndShowResults(Map<JLabel, SiteParameters> sitesMap, JLabel siteToGo, JLabel currentPosition, byte impactFromMove){
         Climber climberToMove = getClimberWithSpecificLocation(currentPosition);
         if(climberToMove == null) return false;
 
@@ -73,9 +73,6 @@ public class GameLogic implements GameLogicInterface{
             climberToMove.setCurrentPosition(siteToGo);
             climberToMove.setSiteParameters(siteParametersToMove);
 
-            byte impactFromMove = currSiteParameters.impactFromMove(siteParametersToMove);
-            impactFromMove += weather.impactFromWeather(true);
-            impactFromMove += climberToMove.impactFromMovesInOneDay();
             makeImpactOnClimber(climberToMove, impactFromMove);
 
             byte movesInDay = climberToMove.getMovesInOneDay();
@@ -85,6 +82,20 @@ public class GameLogic implements GameLogicInterface{
             return false;
         }
 
+    }
+
+    @Override
+    public byte getImpactFromMoving(Map<JLabel, SiteParameters> sitesMap, JLabel siteToGo, JLabel currentPosition) {
+        Climber climberToMove = getClimberWithSpecificLocation(currentPosition);
+        if(climberToMove == null) return 0;
+        SiteParameters siteParametersToMove = sitesMap.get(siteToGo);
+        SiteParameters currSiteParameters = climberToMove.getSiteParameters();
+        if(siteParametersToMove.isLegalToMove(currSiteParameters)){
+            byte impactFromMove = currSiteParameters.impactFromMove(siteParametersToMove);
+            impactFromMove += weather.impactFromWeather(true);
+            impactFromMove += climberToMove.impactFromMovesInOneDay();
+            return impactFromMove;
+        } else return 127;
     }
 
     private Climber getClimberWithSpecificLocation(JLabel currentPosition){

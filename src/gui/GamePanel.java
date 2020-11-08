@@ -938,10 +938,17 @@ public class GamePanel extends javax.swing.JPanel {
     }
 
     private void makeMove(JLabel componentClicked, Map<JLabel, SiteParameters> sitesWithParametersMap){
-
-        if(gameLogic.moveClimberAndShowResults(sitesWithParametersMap, componentClicked, currentPositionReadyToMove)){
-            componentClicked.setIcon(currentPositionReadyToMove.getIcon());
-            currentPositionReadyToMove.setIcon(null);
+        byte impactBuf = gameLogic.getImpactFromMoving(sitesWithParametersMap, componentClicked, currentPositionReadyToMove);
+        if(impactBuf != 127){
+            int ans = JOptionPane.showConfirmDialog(this,
+                    "Impact on acclimation:\n" + impactBuf,
+                    "Acclimation impact", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+            if(ans == JOptionPane.YES_OPTION){
+                if(gameLogic.moveClimberAndShowResults(sitesWithParametersMap, componentClicked, currentPositionReadyToMove, impactBuf)){
+                    componentClicked.setIcon(currentPositionReadyToMove.getIcon());
+                    currentPositionReadyToMove.setIcon(null);
+                }
+            }
         }
         makeUnreadyToMove();
     }
