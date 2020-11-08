@@ -72,9 +72,14 @@ public class GameLogic implements GameLogicInterface{
         if(siteParametersToMove.isLegalToMove(currSiteParameters) && climberToMove.isAlive()){
             climberToMove.setCurrentPosition(siteToGo);
             climberToMove.setSiteParameters(siteParametersToMove);
+
             byte impactFromMove = currSiteParameters.impactFromMove(siteParametersToMove);
             impactFromMove += weather.impactFromWeather(true);
+            impactFromMove += climberToMove.impactFromMovesInOneDay();
             makeImpactOnClimber(climberToMove, impactFromMove);
+
+            byte movesInDay = climberToMove.getMovesInOneDay();
+            climberToMove.setMovesInOneDay(++movesInDay);
             return true;
         } else {
             return false;
@@ -144,6 +149,7 @@ public class GameLogic implements GameLogicInterface{
         List<Byte> impactBuf = getImpactForNextDay();
         for(int i = 0; i < climbers.size(); i++){
             makeImpactOnClimber(climbers.get(i),impactBuf.get(i));
+            climbers.get(i).setMovesInOneDay((byte) 0);
         }
         weather.generateNewWeather();
     }

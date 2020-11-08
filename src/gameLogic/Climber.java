@@ -14,4 +14,8 @@ class Climber {
     private byte acclimation;
     private boolean isAlive;
     private byte movesInOneDay;
+
+    public byte impactFromMovesInOneDay(){
+        return (byte) (-movesInOneDay*3);
+    }
 }

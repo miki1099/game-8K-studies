@@ -716,13 +716,11 @@ public class GamePanel extends javax.swing.JPanel {
         tempLabel.setText("20");
 
         jLabel7.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jLabel7.setText("Predicted impact on acclimation: ");
+        jLabel7.setText("Impact on acclimation for next day: ");
 
         predictedAccImpactClimber2Label.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        predictedAccImpactClimber2Label.setText("---");
 
         predictedAccImpactClimber1Label.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        predictedAccImpactClimber1Label.setText("---");
 
         climber1Icon2.setIcon(ICON_CLIMBER_1); // NOI18N
         climber1Icon2.setToolTipText("");
@@ -789,7 +787,7 @@ public class GamePanel extends javax.swing.JPanel {
                                                                 .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                                                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                                                        .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 279, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                                        .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
                                                                         .addComponent(dayCounter, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE)
                                                                         .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                                                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -940,6 +938,7 @@ public class GamePanel extends javax.swing.JPanel {
     }
 
     private void makeMove(JLabel componentClicked, Map<JLabel, SiteParameters> sitesWithParametersMap){
+
         if(gameLogic.moveClimberAndShowResults(sitesWithParametersMap, componentClicked, currentPositionReadyToMove)){
             componentClicked.setIcon(currentPositionReadyToMove.getIcon());
             currentPositionReadyToMove.setIcon(null);
@@ -976,6 +975,7 @@ public class GamePanel extends javax.swing.JPanel {
         updateWeather();
         updateDayCounter();
         updateClimbersStatus();
+        updatePredictedImpact();
     }
 
     private void exitButtonActionPerformed(java.awt.event.ActionEvent evt) {
