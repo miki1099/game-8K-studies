@@ -12,6 +12,12 @@ public class GameLogic implements GameLogicInterface{
     private Weather weather;
     private short days;
 
+    private final byte ACCLIMATION_START_VALUE = 20;
+    private final WeatherType WEATHER_TYPE_START_VALUE = WeatherType.SUN;
+    private final byte WEATHER_TREND_DAYS_START_VALUE = 2;
+    private final byte TEMPERATURE_START_VALUE = 5;
+    private final boolean POSITIVE_TREND_START_VALUE = false;
+
     private GameLogic(List<JLabel> currentPositions, List<SiteParameters> siteParameters) {
         initGame(currentPositions, siteParameters);
     }
@@ -29,7 +35,7 @@ public class GameLogic implements GameLogicInterface{
             climbers.add(Climber.builder()
                     .currentPosition(currentPositions.get(i))
                     .siteParameters(siteParameters.get(i))
-                    .acclimation((byte) 20)
+                    .acclimation(ACCLIMATION_START_VALUE)
                     .isAlive(true)
                     .movesInOneDay((byte) 0)
                     .build());
@@ -37,10 +43,10 @@ public class GameLogic implements GameLogicInterface{
 
         days = 1;
         weather = Weather.builder()
-                .temperature((byte) 20)
-                .weatherType(WeatherType.SUN)
-                .weatherTrendDays((byte) 2)
-                .positiveTrendWeather(false)
+                .temperature(TEMPERATURE_START_VALUE)
+                .weatherType(WEATHER_TYPE_START_VALUE)
+                .weatherTrendDays(WEATHER_TREND_DAYS_START_VALUE)
+                .positiveTrendWeather(POSITIVE_TREND_START_VALUE)
                 .build();
     }
 
@@ -74,9 +80,10 @@ public class GameLogic implements GameLogicInterface{
             climberToMove.setSiteParameters(siteParametersToMove);
 
             makeImpactOnClimber(climberToMove, impactFromMove);
-
-            byte movesInDay = climberToMove.getMovesInOneDay();
-            climberToMove.setMovesInOneDay(++movesInDay);
+            if(impactFromMove != 0){
+                byte movesInDay = climberToMove.getMovesInOneDay();
+                climberToMove.setMovesInOneDay(++movesInDay);
+            }
             return true;
         } else {
             return false;
@@ -87,9 +94,14 @@ public class GameLogic implements GameLogicInterface{
     @Override
     public byte getImpactFromMoving(Map<JLabel, SiteParameters> sitesMap, JLabel siteToGo, JLabel currentPosition) {
         Climber climberToMove = getClimberWithSpecificLocation(currentPosition);
-        if(climberToMove == null) return 0;
+        if(climberToMove == null) return 127;
+        else if(!climberToMove.isAlive()) return 127;
+
         SiteParameters siteParametersToMove = sitesMap.get(siteToGo);
         SiteParameters currSiteParameters = climberToMove.getSiteParameters();
+
+        if(siteParametersToMove.equals(currSiteParameters)) return 0;
+
         if(siteParametersToMove.isLegalToMove(currSiteParameters)){
             byte impactFromMove = currSiteParameters.impactFromMove(siteParametersToMove);
             impactFromMove += weather.impactFromWeather(true);

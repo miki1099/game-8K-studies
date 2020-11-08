@@ -15,7 +15,9 @@ class Climber {
     private boolean isAlive;
     private byte movesInOneDay;
 
+    private final byte MOVES_IN_DAY_MOD = -7;
+
     public byte impactFromMovesInOneDay(){
-        return (byte) (-movesInOneDay*3);
+        return (byte) (movesInOneDay*MOVES_IN_DAY_MOD);
     }
 }

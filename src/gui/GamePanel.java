@@ -860,7 +860,7 @@ public class GamePanel extends javax.swing.JPanel {
 
 
 
-    // added mehtods
+    // added methods
 
     //start update methods block
     private void updateIcon(Icon icon, List<JLabel> labels, JLabel currPos){
@@ -882,15 +882,23 @@ public class GamePanel extends javax.swing.JPanel {
         }
 
         counter = 0;
-
-        for(boolean isAlive : gameLogic.checkClimbersAreAlive()){
-            if(counter == 0 && !isAlive){
-                JLabel currPos = gameLogic.getCurrentClimbersPosition().get(counter);
-                updateIcon(ICON_CLIMBER_1_DEAD,  climber1Icons, currPos);
-            } else if(counter == 1&& !isAlive){
-                JLabel currPos = gameLogic.getCurrentClimbersPosition().get(counter);
-                updateIcon(ICON_CLIMBER_2_DEAD,  climber2Icons, currPos);
+        byte deadCounter = 0;
+        List<Boolean> climbersAreAliveList = gameLogic.checkClimbersAreAlive();
+        for(boolean isAlive : climbersAreAliveList){
+            if(!isAlive){
+                deadCounter++;
+                if(counter == 0){
+                    JLabel currPos = gameLogic.getCurrentClimbersPosition().get(counter);
+                    updateIcon(ICON_CLIMBER_1_DEAD,  climber1Icons, currPos);
+                } else if(counter == 1){
+                    JLabel currPos = gameLogic.getCurrentClimbersPosition().get(counter);
+                    updateIcon(ICON_CLIMBER_2_DEAD,  climber2Icons, currPos);
+                }
+                if(deadCounter == climbersAreAliveList.size()){
+                    endGame();
+                }
             }
+
             counter++;
         }
     }
@@ -967,6 +975,15 @@ public class GamePanel extends javax.swing.JPanel {
         }
     }
     // end moving methods
+
+    //game finished methods
+    public void endGame(){
+        JOptionPane.showMessageDialog(this,
+                "Game over\nall climbers are dead",
+                "GAME OVER", JOptionPane.INFORMATION_MESSAGE);
+        Window.exitToMenu();
+    }
+    //end game finished methods
 
     // invoke move operation
     private void rightSiteMouseClicked(java.awt.event.MouseEvent evt, JLabel componentClicked) {
