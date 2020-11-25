@@ -12,8 +12,10 @@ class Climber {
     private JLabel currentPosition;
     private SiteParameters siteParameters;
     private byte acclimation;
-    private boolean isAlive;
     private byte movesInOneDay;
+    private boolean isAlive;
+    private boolean madeToTop;
+    private Item item;
 
     private final byte MOVES_IN_DAY_MOD = -7;
 

@@ -1,9 +1,6 @@
 package gui;
 
-import gameLogic.GameLogic;
-import gameLogic.Routes;
-import gameLogic.SiteParameters;
-import gameLogic.WeatherType;
+import gameLogic.*;
 
 import javax.swing.*;
 import javax.swing.border.BevelBorder;
@@ -32,6 +29,9 @@ public class GamePanel extends javax.swing.JPanel {
     private final Icon ICON_SUN = new ImageIcon(getClass().getResource("/gui/Graphics/sunny.png"));
     private final Icon ICON_CLOUDS = new ImageIcon(getClass().getResource("/gui/Graphics/clouds.png"));
     private final Icon ICON_SNOW = new ImageIcon(getClass().getResource("/gui/Graphics/snow.png"));
+    private final Icon ICON_BACKPACK = new ImageIcon(getClass().getResource("/gui/Graphics/backpack.png"));
+    private final Icon ICON_TENT = new ImageIcon(getClass().getResource("/gui/Graphics/camping.png"));
+
     /**
      *
      * Creates new form GamePanel
@@ -40,6 +40,7 @@ public class GamePanel extends javax.swing.JPanel {
         initComponents();
         gamePrepare();
         constructGameLogicInstance();
+        itemsLabelUpdate();
         updateClimbersStatus();
         updateWeather();
         updatePredictedImpact();
@@ -77,6 +78,7 @@ public class GamePanel extends javax.swing.JPanel {
         siteMappingMethod(sitesWithParametersMapRight, baseRight, secondSiteRight, thirdSiteCRouteRight,
                 fourthSiteCRouteRight, fifthSiteCRouteRight, topSiteRight, thirdSiteRight, fourthSiteDRouteRight,
                 fifthSiteDRouteRight, fourthSiteERouteRight, fifthSiteERouteRight);
+
 
     }
 
@@ -117,7 +119,7 @@ public class GamePanel extends javax.swing.JPanel {
         jLabel3 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jLayeredPane1 = new javax.swing.JLayeredPane();
-        baseSite = new javax.swing.JPanel();
+        JPanel baseSite = new JPanel();
         baseLeft = new javax.swing.JLabel();
         baseRight = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
@@ -154,8 +156,8 @@ public class GamePanel extends javax.swing.JPanel {
         fifthSiteERouteRight = new javax.swing.JLabel();
         climber1Icon = new javax.swing.JLabel();
         climber2Icon = new javax.swing.JLabel();
-        thingsList1 = new javax.swing.JComboBox<>();
-        thingsList2 = new javax.swing.JComboBox<>();
+        itemsList1 = new javax.swing.JComboBox<>();
+        itemsList2 = new javax.swing.JComboBox<>();
         weatherIcon = new javax.swing.JLabel();
         tampLabel = new javax.swing.JLabel();
         nextDayButton = new javax.swing.JButton();
@@ -671,15 +673,14 @@ public class GamePanel extends javax.swing.JPanel {
         climber2Icon.setIcon(ICON_CLIMBER_2); // NOI18N
         climber2Icon.setToolTipText("");
 
-        thingsList1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "siege backpack", "tent", "nothing" }));
-        thingsList1.addItemListener(new java.awt.event.ItemListener() {
+
+        itemsList1.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
                 thingsList1ItemStateChanged(evt);
             }
         });
 
-        thingsList2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "tent", "siege backpack", "nothing" }));
-        thingsList2.addItemListener(new java.awt.event.ItemListener() {
+        itemsList2.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
                 thingsList2ItemStateChanged(evt);
             }
@@ -754,8 +755,8 @@ public class GamePanel extends javax.swing.JPanel {
                                                                 .addGroup(layout.createSequentialGroup()
                                                                         .addGap(92, 92, 92)
                                                                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                                                                .addComponent(thingsList1, 0, 107, Short.MAX_VALUE)
-                                                                                .addComponent(thingsList2, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                                                                .addComponent(itemsList1, 0, 107, Short.MAX_VALUE)
+                                                                                .addComponent(itemsList2, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                                                                         .addGap(111, 111, 111))
                                                                 .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -822,11 +823,11 @@ public class GamePanel extends javax.swing.JPanel {
                                 .addGap(67, 67, 67)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                         .addComponent(climber1Icon1)
-                                        .addComponent(thingsList1, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addComponent(itemsList1, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addGap(49, 49, 49)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                         .addComponent(climber2Icon1)
-                                        .addComponent(thingsList2, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addComponent(itemsList2, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addGap(43, 43, 43)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                         .addComponent(weatherIcon, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -903,6 +904,16 @@ public class GamePanel extends javax.swing.JPanel {
         }
     }
 
+    private void itemsLabelUpdate() {
+        List<Item> items = gameLogic.getItemsList();
+        itemsList1.removeAllItems();
+        itemsList2.removeAllItems();
+        itemsList1.addItem(items.get(0));
+        itemsList1.addItem(items.get(1));
+        itemsList2.addItem(items.get(2));
+        itemsList2.addItem(items.get(3));
+    }
+
     private void updateWeather(){
         WeatherType weatherType = gameLogic.getWeatherType();
         tempLabel.setText(gameLogic.getTemperature()+"");
@@ -969,6 +980,7 @@ public class GamePanel extends javax.swing.JPanel {
                 makeMove(componentClicked, sitesWithParametersMap);
                 updateClimbersStatus();
                 updatePredictedImpact();
+                itemsLabelUpdate();
             }
         } else {
             makeReadyToMove(componentClicked);
@@ -1013,11 +1025,11 @@ public class GamePanel extends javax.swing.JPanel {
     }
 
     private void thingsList1ItemStateChanged(java.awt.event.ItemEvent evt) {
-        // TODO add your handling code here:
+        gameLogic.setItemToClimber((Item) evt.getItem(),0);
     }
 
     private void thingsList2ItemStateChanged(java.awt.event.ItemEvent evt) {
-        // TODO add your handling code here:
+        gameLogic.setItemToClimber((Item) evt.getItem(),1);
     }
 
 
@@ -1032,7 +1044,6 @@ public class GamePanel extends javax.swing.JPanel {
     private javax.swing.JProgressBar acclimatizationClimber2;
     private javax.swing.JLabel baseLeft;
     private javax.swing.JLabel baseRight;
-    private javax.swing.JPanel baseSite;
     private javax.swing.JLabel dayCounter;
     private javax.swing.JButton exitButton;
     private javax.swing.JPanel fifthSiteCRoute;
@@ -1070,8 +1081,8 @@ public class GamePanel extends javax.swing.JPanel {
     private javax.swing.JLabel secondSiteRight;
     private javax.swing.JLabel tampLabel;
     private javax.swing.JLabel tempLabel;
-    private javax.swing.JComboBox<String> thingsList1;
-    private javax.swing.JComboBox<String> thingsList2;
+    private javax.swing.JComboBox<Item> itemsList1;
+    private javax.swing.JComboBox<Item> itemsList2;
     private javax.swing.JPanel thirdSite;
     private javax.swing.JPanel thirdSiteCRoute;
     private javax.swing.JLabel thirdSiteCRouteLeft;

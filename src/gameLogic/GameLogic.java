@@ -3,12 +3,14 @@ package gameLogic;
 
 import javax.swing.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
 public class GameLogic implements GameLogicInterface{
     private static GameLogic gameLogic;
     private List<Climber> climbers;
+    private List<Item> items;
     private Weather weather;
     private short days;
 
@@ -32,11 +34,19 @@ public class GameLogic implements GameLogicInterface{
 
         climbers = new ArrayList<>();
         for(int i = 0; i < currentPositions.size(); i++){
+            Item item;
+            if(i == 0){
+                item = new Backpack();
+            } else{
+                item = new Tent();
+            }
             climbers.add(Climber.builder()
                     .currentPosition(currentPositions.get(i))
                     .siteParameters(siteParameters.get(i))
                     .acclimation(ACCLIMATION_START_VALUE)
                     .isAlive(true)
+                    .madeToTop(false)
+                    .item(item)
                     .movesInOneDay((byte) 0)
                     .build());
         }
@@ -106,6 +116,7 @@ public class GameLogic implements GameLogicInterface{
             byte impactFromMove = currSiteParameters.impactFromMove(siteParametersToMove);
             impactFromMove += weather.impactFromWeather(true);
             impactFromMove += climberToMove.impactFromMovesInOneDay();
+            impactFromMove += climberToMove.getItem().getMoveImpactMod();
             return impactFromMove;
         } else return 127;
     }
@@ -124,12 +135,12 @@ public class GameLogic implements GameLogicInterface{
         if(climber.isAlive()){
             byte acc = (byte) (climber.getAcclimation() + impact);
 
-            if(acc <= 0){
+            if(acc >= 100 || acc <= -50){
+                climber.setAcclimation((byte)100);
+            } else if(acc <= 0){
                 climber.setAlive(false);
                 climber.setAcclimation((byte)0);
-            } else if(acc >= 100){
-                climber.setAcclimation((byte)100);
-            } else {
+            }else {
                 climber.setAcclimation(acc);
             }
         }
@@ -161,6 +172,7 @@ public class GameLogic implements GameLogicInterface{
         List<Byte> nightImpactList = new ArrayList<>();
         for(Climber climber : climbers){
             byte buf = (byte)(climber.getSiteParameters().getImpactFromSiteNextDay() + nightWeatherImpact);
+            buf += climber.getItem().getNightImpactMod();
             nightImpactList.add(buf);
         }
         return nightImpactList;
@@ -180,5 +192,20 @@ public class GameLogic implements GameLogicInterface{
     @Override
     public short getDay() {
         return days;
+    }
+
+    @Override
+    public List<Item> getItemsList() {
+        List<Item> itemsList = new ArrayList<>();
+        for(Climber climber : climbers){
+            itemsList.add(climber.getItem());
+            itemsList.add(new BlankItem());
+        }
+        return itemsList;
+    }
+
+    @Override
+    public void setItemToClimber(Item item, int which) {
+        climbers.get(which).setItem(item);
     }
 }

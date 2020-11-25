@@ -18,5 +18,7 @@ public interface GameLogicInterface {
     public List<Byte> getImpactForNextDay();
     public void makeNextDay();
     public short getDay();
+    public List<Item> getItemsList();
+    public void setItemToClimber(Item item, int which);
 
 }
