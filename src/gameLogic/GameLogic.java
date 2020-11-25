@@ -33,7 +33,6 @@ public class GameLogic implements GameLogicInterface{
         days = 1;
 
         itemsLeft = new ArrayList<>();
-        itemsLeft.add(new BlankItem());
 
         climbers = new ArrayList<>();
         for(int i = 0; i < currentPositions.size(); i++){
@@ -100,6 +99,14 @@ public class GameLogic implements GameLogicInterface{
             }
 
             Item climberItem = climberToMove.getItem();
+            for(int i = 0; i < itemsLeft.size(); i++){
+                Item item = itemsLeft.get(i);
+                if(climberItem instanceof BlankItem && item.getActualSite().equals(siteToGo) && (item instanceof Backpack || item instanceof Tent)){
+                    climberToMove.setItem(item);
+                    itemsLeft.set(i, new BlankItem());
+                    break;
+                }
+            }
             climberItem.setActualSite(siteToGo);
 
             makeImpactOnClimber(climberToMove, impactFromMove);
@@ -233,5 +240,21 @@ public class GameLogic implements GameLogicInterface{
     @Override
     public List<Item> getItemsLeft() {
         return itemsLeft;
+    }
+
+    @Override
+    public List<JLabel> getCurrentPositionsItemsLeft() {
+        List<JLabel> currItemPos= new ArrayList<>();
+        for(Item item : itemsLeft){
+            currItemPos.add(item.getActualSite());
+        }
+        return currItemPos;
+    }
+
+    @Override
+    public boolean doesClimberCanStandOnItem(JLabel climberPosition, JLabel siteToGo) {
+        Item climberItem = getClimberWithSpecificLocation(climberPosition).getItem();
+        return !(climberItem instanceof Backpack) && !(climberItem instanceof Tent);
+
     }
 }

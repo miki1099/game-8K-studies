@@ -22,6 +22,7 @@ public class GamePanel extends javax.swing.JPanel {
     private Map<JLabel, SiteParameters> sitesWithParametersMapRight;
     private boolean isGoingToMoveClimber;
     private JLabel currentPositionReadyToMove;
+    private boolean isReadyToChange;
     private final Icon ICON_CLIMBER_1 = new ImageIcon(getClass().getResource("/gui/Graphics/climber.png"));
     private final Icon ICON_CLIMBER_2 = new ImageIcon(getClass().getResource("/gui/Graphics/climber (1).png"));
     private final Icon ICON_CLIMBER_1_DEAD = new ImageIcon(getClass().getResource("/gui/Graphics/climber dead.png"));
@@ -673,7 +674,6 @@ public class GamePanel extends javax.swing.JPanel {
         climber2Icon.setIcon(ICON_CLIMBER_2); // NOI18N
         climber2Icon.setToolTipText("");
 
-
         itemsList1.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
                 thingsList1ItemStateChanged(evt);
@@ -905,6 +905,7 @@ public class GamePanel extends javax.swing.JPanel {
     }
 
     private void itemListUpdate() {
+        isReadyToChange = false;
         List<Item> items = gameLogic.getItemsList();
         itemsList1.removeAllItems();
         itemsList2.removeAllItems();
@@ -918,6 +919,7 @@ public class GamePanel extends javax.swing.JPanel {
         if(!(buf instanceof BlankItem)){
             itemsList2.addItem(items.get(3));
         }
+        isReadyToChange = true;
 
     }
 
@@ -992,7 +994,11 @@ public class GamePanel extends javax.swing.JPanel {
 
     private void clickOperation(JLabel componentClicked, Map<JLabel, SiteParameters> sitesWithParametersMap){
         if(isGoingToMoveClimber){
-            if(gameLogic.getCurrentClimbersPosition().contains(componentClicked)){
+            List<JLabel> positionList = gameLogic.getCurrentClimbersPosition();
+            if(gameLogic.getCurrentPositionsItemsLeft().contains(componentClicked) &&
+                    !gameLogic.doesClimberCanStandOnItem(currentPositionReadyToMove, componentClicked)){
+                makeUnreadyToMove();
+            } else if(positionList.contains(componentClicked)){
                 makeUnreadyToMove();
             } else {
                 makeMove(componentClicked, sitesWithParametersMap);
@@ -1044,13 +1050,18 @@ public class GamePanel extends javax.swing.JPanel {
     }
 
     private void thingsList1ItemStateChanged(java.awt.event.ItemEvent evt) {
-        gameLogic.setItemToClimber((Item) evt.getItem(),0);
-        updatePredictedImpact();
+        if(isReadyToChange == true){
+            gameLogic.setItemToClimber((Item) evt.getItem(),0);
+            updatePredictedImpact();
+        }
+
     }
 
     private void thingsList2ItemStateChanged(java.awt.event.ItemEvent evt) {
-        gameLogic.setItemToClimber((Item) evt.getItem(),1);
-        updatePredictedImpact();
+        if(isReadyToChange == true){
+            gameLogic.setItemToClimber((Item) evt.getItem(),1);
+            updatePredictedImpact();
+        }
     }
 
 

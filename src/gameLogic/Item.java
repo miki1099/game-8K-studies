@@ -15,7 +15,9 @@ public abstract class Item {
     }
 
     public boolean equals(Item item){
-        return item.getMoveImpactMod() == this.moveImpactMod && item.getNightImpactMod() == this.nightImpactMod;
+        return item.getMoveImpactMod() == this.moveImpactMod &&
+                item.getNightImpactMod() == this.nightImpactMod &&
+                item.name.equals(this.name);
     }
 
     @Override
