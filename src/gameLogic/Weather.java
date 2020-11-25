@@ -9,27 +9,27 @@ import java.util.Random;
 @Builder
 class Weather {
     private WeatherType weatherType;
-    private byte temperature;
-    private byte weatherTrendDays;
+    private short temperature;
+    private short weatherTrendDays;
     private boolean positiveTrendWeather;
 
-    private final byte MIN_TEMPERATURE = -60;
-    private final byte MAX_TEMPERATURE = 10;
-    private final byte MAX_TEMPERATURE_CHANGE = 15;
-    private final byte MAX_TREND_DAYS = 3;
-    private final byte SUNNY_DAY_MOD = 0;
-    private final byte CLOUD_DAY_MOD = -3;
-    private final byte SNOW_DAY_MOD = -7;
+    private final short MIN_TEMPERATURE = -60;
+    private final short MAX_TEMPERATURE = 10;
+    private final short MAX_TEMPERATURE_CHANGE = 15;
+    private final short MAX_TREND_DAYS = 3;
+    private final short SUNNY_DAY_MOD = 0;
+    private final short CLOUD_DAY_MOD = -3;
+    private final short SNOW_DAY_MOD = -7;
 
     public void generateNewWeather(){
         Random random = new Random();
         if(weatherTrendDays == 0){
-            weatherTrendDays = (byte) (random.nextInt(MAX_TREND_DAYS));
+            weatherTrendDays = (short) (random.nextInt(MAX_TREND_DAYS));
             positiveTrendWeather = random.nextBoolean();
         } else{
             weatherTrendDays--;
         }
-        byte tempMod = (byte) (random.nextInt(MAX_TEMPERATURE_CHANGE));
+        short tempMod = (short) (random.nextInt(MAX_TEMPERATURE_CHANGE));
         if(this.temperature <= MIN_TEMPERATURE){
             this.temperature += Math.abs(tempMod);
         } else if(this.temperature >= MAX_TEMPERATURE){
@@ -50,8 +50,8 @@ class Weather {
 
     }
 
-    public byte impactFromWeather(boolean isMoving){
-        byte weatherImpactMod = SUNNY_DAY_MOD;
+    public short impactFromWeather(boolean isMoving){
+        short weatherImpactMod = SUNNY_DAY_MOD;
         if(this.weatherType == WeatherType.CLOUDS){
             weatherImpactMod -= CLOUD_DAY_MOD;
         } else if(this.weatherType == WeatherType.SNOW){

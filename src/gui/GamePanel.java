@@ -40,7 +40,7 @@ public class GamePanel extends javax.swing.JPanel {
         initComponents();
         gamePrepare();
         constructGameLogicInstance();
-        itemsLabelUpdate();
+        itemListUpdate();
         updateClimbersStatus();
         updateWeather();
         updatePredictedImpact();
@@ -51,8 +51,8 @@ public class GamePanel extends javax.swing.JPanel {
         List<SiteParameters> siteParameters = new ArrayList<>();
         currentPosLabels.add(baseLeft);
         currentPosLabels.add(baseRight);
-        siteParameters.add(new SiteParameters((byte) 0, Routes.E,Routes.D,Routes.C));
-        siteParameters.add(new SiteParameters((byte) 0, Routes.E,Routes.D,Routes.C));
+        siteParameters.add(new SiteParameters((short) 0, Routes.E,Routes.D,Routes.C));
+        siteParameters.add(new SiteParameters((short) 0, Routes.E,Routes.D,Routes.C));
         gameLogic = GameLogic.getInstance(currentPosLabels, siteParameters);
     }
 
@@ -86,19 +86,19 @@ public class GamePanel extends javax.swing.JPanel {
                                    JLabel thirdSiteCRoute, JLabel fourthSiteCRoute, JLabel fifthSiteCRoute,
                                    JLabel topSite, JLabel thirdSite, JLabel fourthSiteDRoute, JLabel fifthSiteDRoute,
                                    JLabel fourthSiteERoute, JLabel fifthSiteERoute) {
-        sitesWithParametersMap.put(base, new SiteParameters((byte) 0, Routes.E,Routes.D,Routes.C));
-        sitesWithParametersMap.put(secondSite, new SiteParameters((byte) 1, Routes.E,Routes.D,Routes.C));
-        sitesWithParametersMap.put(thirdSiteCRoute, new SiteParameters((byte) 2, Routes.C));
-        sitesWithParametersMap.put(fourthSiteCRoute, new SiteParameters((byte) 3, Routes.C));
-        sitesWithParametersMap.put(fifthSiteCRoute, new SiteParameters((byte) 4, Routes.C));
-        sitesWithParametersMap.put(topSite, new SiteParameters((byte) 5, Routes.E,Routes.D,Routes.C));
+        sitesWithParametersMap.put(base, new SiteParameters((short) 0, Routes.E,Routes.D,Routes.C));
+        sitesWithParametersMap.put(secondSite, new SiteParameters((short) 1, Routes.E,Routes.D,Routes.C));
+        sitesWithParametersMap.put(thirdSiteCRoute, new SiteParameters((short) 2, Routes.C));
+        sitesWithParametersMap.put(fourthSiteCRoute, new SiteParameters((short) 3, Routes.C));
+        sitesWithParametersMap.put(fifthSiteCRoute, new SiteParameters((short) 4, Routes.C));
+        sitesWithParametersMap.put(topSite, new SiteParameters((short) 5, Routes.E,Routes.D,Routes.C));
 
-        sitesWithParametersMap.put(thirdSite, new SiteParameters((byte) 2, Routes.D, Routes.E));
-        sitesWithParametersMap.put(fourthSiteDRoute, new SiteParameters((byte) 3, Routes.D));
-        sitesWithParametersMap.put(fifthSiteDRoute, new SiteParameters((byte) 4, Routes.D));
+        sitesWithParametersMap.put(thirdSite, new SiteParameters((short) 2, Routes.D, Routes.E));
+        sitesWithParametersMap.put(fourthSiteDRoute, new SiteParameters((short) 3, Routes.D));
+        sitesWithParametersMap.put(fifthSiteDRoute, new SiteParameters((short) 4, Routes.D));
 
-        sitesWithParametersMap.put(fourthSiteERoute, new SiteParameters((byte) 3, Routes.E));
-        sitesWithParametersMap.put(fifthSiteERoute, new SiteParameters((byte) 4, Routes.E));
+        sitesWithParametersMap.put(fourthSiteERoute, new SiteParameters((short) 3, Routes.E));
+        sitesWithParametersMap.put(fifthSiteERoute, new SiteParameters((short) 4, Routes.E));
     }
 
     /**
@@ -873,7 +873,7 @@ public class GamePanel extends javax.swing.JPanel {
 
     private void updateClimbersStatus(){
         int counter = 0;
-        for(byte acclimation : gameLogic.getClimbersAcclimation()){
+        for(short acclimation : gameLogic.getClimbersAcclimation()){
             if(counter == 0){
                 acclimatizationClimber1.setValue(acclimation);
             } else if(counter == 1){
@@ -883,7 +883,7 @@ public class GamePanel extends javax.swing.JPanel {
         }
 
         counter = 0;
-        byte deadCounter = 0;
+        short deadCounter = 0;
         List<Boolean> climbersAreAliveList = gameLogic.checkClimbersAreAlive();
         for(boolean isAlive : climbersAreAliveList){
             if(!isAlive){
@@ -904,14 +904,21 @@ public class GamePanel extends javax.swing.JPanel {
         }
     }
 
-    private void itemsLabelUpdate() {
+    private void itemListUpdate() {
         List<Item> items = gameLogic.getItemsList();
         itemsList1.removeAllItems();
         itemsList2.removeAllItems();
-        itemsList1.addItem(items.get(0));
-        itemsList1.addItem(items.get(1));
+        Item buf = items.get(0);
+        itemsList1.addItem(buf);
+        if(!(buf instanceof BlankItem)){
+            itemsList1.addItem(items.get(1));
+        }
+        buf = items.get(2);
         itemsList2.addItem(items.get(2));
-        itemsList2.addItem(items.get(3));
+        if(!(buf instanceof BlankItem)){
+            itemsList2.addItem(items.get(3));
+        }
+
     }
 
     private void updateWeather(){
@@ -931,13 +938,24 @@ public class GamePanel extends javax.swing.JPanel {
     }
 
     private void updatePredictedImpact(){
-        List<Byte> nightImpactList = gameLogic.getImpactForNextDay();
+        List<Short> nightImpactList = gameLogic.getImpactForNextDay();
         predictedAccImpactClimber1Label.setText(nightImpactList.get(0)+"");
         predictedAccImpactClimber2Label.setText(nightImpactList.get(1)+"");
     }
 
     private void updateDayCounter(){
         dayCounter.setText(gameLogic.getDay()+"");
+    }
+
+    private void updateItemsIcons(){
+        List<Item> itemsLeft = gameLogic.getItemsLeft();
+        for(Item item : itemsLeft){
+            if(item instanceof Backpack){
+                item.getActualSite().setIcon(ICON_BACKPACK);
+            } else if(item instanceof Tent){
+                item.getActualSite().setIcon(ICON_TENT);
+            }
+        }
     }
     //end update methods block
 
@@ -957,7 +975,7 @@ public class GamePanel extends javax.swing.JPanel {
     }
 
     private void makeMove(JLabel componentClicked, Map<JLabel, SiteParameters> sitesWithParametersMap){
-        byte impactBuf = gameLogic.getImpactFromMoving(sitesWithParametersMap, componentClicked, currentPositionReadyToMove);
+        short impactBuf = gameLogic.getImpactFromMoving(sitesWithParametersMap, componentClicked, currentPositionReadyToMove);
         if(impactBuf != 127){
             int ans = JOptionPane.showConfirmDialog(this,
                     "Impact on acclimation:\n" + impactBuf,
@@ -980,7 +998,8 @@ public class GamePanel extends javax.swing.JPanel {
                 makeMove(componentClicked, sitesWithParametersMap);
                 updateClimbersStatus();
                 updatePredictedImpact();
-                itemsLabelUpdate();
+                itemListUpdate();
+                updateItemsIcons();
             }
         } else {
             makeReadyToMove(componentClicked);
@@ -1026,10 +1045,12 @@ public class GamePanel extends javax.swing.JPanel {
 
     private void thingsList1ItemStateChanged(java.awt.event.ItemEvent evt) {
         gameLogic.setItemToClimber((Item) evt.getItem(),0);
+        updatePredictedImpact();
     }
 
     private void thingsList2ItemStateChanged(java.awt.event.ItemEvent evt) {
         gameLogic.setItemToClimber((Item) evt.getItem(),1);
+        updatePredictedImpact();
     }
 
 

@@ -11,15 +11,15 @@ import javax.swing.*;
 class Climber {
     private JLabel currentPosition;
     private SiteParameters siteParameters;
-    private byte acclimation;
-    private byte movesInOneDay;
+    private short acclimation;
+    private short movesInOneDay;
     private boolean isAlive;
     private boolean madeToTop;
     private Item item;
 
-    private final byte MOVES_IN_DAY_MOD = -7;
+    private final short MOVES_IN_DAY_MOD = -7;
 
-    public byte impactFromMovesInOneDay(){
-        return (byte) (movesInOneDay*MOVES_IN_DAY_MOD);
+    public short impactFromMovesInOneDay(){
+        return (short) (movesInOneDay*MOVES_IN_DAY_MOD);
     }
 }

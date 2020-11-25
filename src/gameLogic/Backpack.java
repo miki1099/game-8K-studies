@@ -1,8 +1,8 @@
 package gameLogic;
 
-class Backpack extends Item {
-    private final byte NIGHT_IMPACT_MOD = 10;
-    private final byte MOVE_IMPACT_MOD = -15;
+public class Backpack extends Item {
+    private final short NIGHT_IMPACT_MOD = 10;
+    private final short MOVE_IMPACT_MOD = -15;
 
     public Backpack() {
         super();

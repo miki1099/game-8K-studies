@@ -3,22 +3,22 @@ package gameLogic;
 
 import javax.swing.*;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
 public class GameLogic implements GameLogicInterface{
     private static GameLogic gameLogic;
     private List<Climber> climbers;
-    private List<Item> items;
+    private List<Item> itemsLeft;
     private Weather weather;
     private short days;
 
-    private final byte ACCLIMATION_START_VALUE = 20;
+    private final short ACCLIMATION_START_VALUE = 20;
     private final WeatherType WEATHER_TYPE_START_VALUE = WeatherType.SUN;
-    private final byte WEATHER_TREND_DAYS_START_VALUE = 2;
-    private final byte TEMPERATURE_START_VALUE = 5;
+    private final short WEATHER_TREND_DAYS_START_VALUE = 2;
+    private final short TEMPERATURE_START_VALUE = 5;
     private final boolean POSITIVE_TREND_START_VALUE = false;
+    private static final short MAX_HEIGHT_LEVEL = 5;
 
     private GameLogic(List<JLabel> currentPositions, List<SiteParameters> siteParameters) {
         initGame(currentPositions, siteParameters);
@@ -32,6 +32,9 @@ public class GameLogic implements GameLogicInterface{
     private void initGame(List<JLabel> currentPositions, List<SiteParameters> siteParameters){
         days = 1;
 
+        itemsLeft = new ArrayList<>();
+        itemsLeft.add(new BlankItem());
+
         climbers = new ArrayList<>();
         for(int i = 0; i < currentPositions.size(); i++){
             Item item;
@@ -40,6 +43,10 @@ public class GameLogic implements GameLogicInterface{
             } else{
                 item = new Tent();
             }
+            item.setActualSite(currentPositions.get(i));
+
+            itemsLeft.add(new BlankItem());
+
             climbers.add(Climber.builder()
                     .currentPosition(currentPositions.get(i))
                     .siteParameters(siteParameters.get(i))
@@ -47,7 +54,7 @@ public class GameLogic implements GameLogicInterface{
                     .isAlive(true)
                     .madeToTop(false)
                     .item(item)
-                    .movesInOneDay((byte) 0)
+                    .movesInOneDay((short) 0)
                     .build());
         }
 
@@ -61,8 +68,8 @@ public class GameLogic implements GameLogicInterface{
     }
 
     @Override
-    public List<Byte> getClimbersAcclimation(){
-        List<Byte> accList = new ArrayList<>();
+    public List<Short> getClimbersAcclimation(){
+        List<Short> accList = new ArrayList<>();
         for (Climber climber : climbers){
             accList.add(climber.getAcclimation());
         }
@@ -79,7 +86,7 @@ public class GameLogic implements GameLogicInterface{
     }
 
     @Override
-    public boolean moveClimberAndShowResults(Map<JLabel, SiteParameters> sitesMap, JLabel siteToGo, JLabel currentPosition, byte impactFromMove){
+    public boolean moveClimberAndShowResults(Map<JLabel, SiteParameters> sitesMap, JLabel siteToGo, JLabel currentPosition, short impactFromMove){
         Climber climberToMove = getClimberWithSpecificLocation(currentPosition);
         if(climberToMove == null) return false;
 
@@ -88,10 +95,16 @@ public class GameLogic implements GameLogicInterface{
         if(siteParametersToMove.isLegalToMove(currSiteParameters) && climberToMove.isAlive()){
             climberToMove.setCurrentPosition(siteToGo);
             climberToMove.setSiteParameters(siteParametersToMove);
+            if(siteParametersToMove.level == MAX_HEIGHT_LEVEL){
+                climberToMove.setMadeToTop(true);
+            }
+
+            Item climberItem = climberToMove.getItem();
+            climberItem.setActualSite(siteToGo);
 
             makeImpactOnClimber(climberToMove, impactFromMove);
             if(impactFromMove != 0){
-                byte movesInDay = climberToMove.getMovesInOneDay();
+                short movesInDay = climberToMove.getMovesInOneDay();
                 climberToMove.setMovesInOneDay(++movesInDay);
             }
             return true;
@@ -102,7 +115,7 @@ public class GameLogic implements GameLogicInterface{
     }
 
     @Override
-    public byte getImpactFromMoving(Map<JLabel, SiteParameters> sitesMap, JLabel siteToGo, JLabel currentPosition) {
+    public short getImpactFromMoving(Map<JLabel, SiteParameters> sitesMap, JLabel siteToGo, JLabel currentPosition) {
         Climber climberToMove = getClimberWithSpecificLocation(currentPosition);
         if(climberToMove == null) return 127;
         else if(!climberToMove.isAlive()) return 127;
@@ -113,7 +126,7 @@ public class GameLogic implements GameLogicInterface{
         if(siteParametersToMove.equals(currSiteParameters)) return 0;
 
         if(siteParametersToMove.isLegalToMove(currSiteParameters)){
-            byte impactFromMove = currSiteParameters.impactFromMove(siteParametersToMove);
+            short impactFromMove = currSiteParameters.impactFromMove(siteParametersToMove);
             impactFromMove += weather.impactFromWeather(true);
             impactFromMove += climberToMove.impactFromMovesInOneDay();
             impactFromMove += climberToMove.getItem().getMoveImpactMod();
@@ -131,15 +144,15 @@ public class GameLogic implements GameLogicInterface{
     }
 
     @Override
-    public void makeImpactOnClimber(Climber climber, byte impact){
+    public void makeImpactOnClimber(Climber climber, short impact){
         if(climber.isAlive()){
-            byte acc = (byte) (climber.getAcclimation() + impact);
+            short acc = (short) (climber.getAcclimation() + impact);
 
-            if(acc >= 100 || acc <= -50){
-                climber.setAcclimation((byte)100);
+            if(acc >= 100){
+                climber.setAcclimation((short)100);
             } else if(acc <= 0){
                 climber.setAlive(false);
-                climber.setAcclimation((byte)0);
+                climber.setAcclimation((short)0);
             }else {
                 climber.setAcclimation(acc);
             }
@@ -156,7 +169,7 @@ public class GameLogic implements GameLogicInterface{
     }
 
     @Override
-    public byte getTemperature() {
+    public short getTemperature() {
         return weather.getTemperature();
     }
 
@@ -166,12 +179,12 @@ public class GameLogic implements GameLogicInterface{
     }
 
     @Override
-    public List<Byte> getImpactForNextDay() {
-        byte nightWeatherImpact = 0;
+    public List<Short> getImpactForNextDay() {
+        short nightWeatherImpact = 0;
         nightWeatherImpact += weather.impactFromWeather(false);
-        List<Byte> nightImpactList = new ArrayList<>();
+        List<Short> nightImpactList = new ArrayList<>();
         for(Climber climber : climbers){
-            byte buf = (byte)(climber.getSiteParameters().getImpactFromSiteNextDay() + nightWeatherImpact);
+            short buf = (short)(climber.getSiteParameters().getImpactFromSiteNextDay() + nightWeatherImpact);
             buf += climber.getItem().getNightImpactMod();
             nightImpactList.add(buf);
         }
@@ -181,10 +194,13 @@ public class GameLogic implements GameLogicInterface{
     @Override
     public void makeNextDay() {
         days++;
-        List<Byte> impactBuf = getImpactForNextDay();
+
+        List<Short> impactBuf = getImpactForNextDay();
         for(int i = 0; i < climbers.size(); i++){
+            JLabel actualSite = climbers.get(i).getCurrentPosition();
+            climbers.get(i).getItem().setActualSite(actualSite);
             makeImpactOnClimber(climbers.get(i),impactBuf.get(i));
-            climbers.get(i).setMovesInOneDay((byte) 0);
+            climbers.get(i).setMovesInOneDay((short) 0);
         }
         weather.generateNewWeather();
     }
@@ -206,6 +222,16 @@ public class GameLogic implements GameLogicInterface{
 
     @Override
     public void setItemToClimber(Item item, int which) {
-        climbers.get(which).setItem(item);
+        Item itemToLeave = climbers.get(which).getItem();
+        if(!itemToLeave.equals(item)){
+            itemsLeft.set(which, itemToLeave);
+            climbers.get(which).setItem(item);
+        }
+
+    }
+
+    @Override
+    public List<Item> getItemsLeft() {
+        return itemsLeft;
     }
 }

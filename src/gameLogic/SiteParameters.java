@@ -5,11 +5,11 @@ import java.util.Collections;
 import java.util.List;
 
 public class SiteParameters {
-    public byte level;
+    public short level;
     public List<Routes> route;
 
 
-    public SiteParameters(byte level,Routes baseRoute, Routes ...routes) {
+    public SiteParameters(short level,Routes baseRoute, Routes ...routes) {
         route = new ArrayList<>();
         this.level = level;
         route.add(baseRoute);
@@ -20,10 +20,10 @@ public class SiteParameters {
         return (this.level == obj.level && this.route.equals(obj.route));
     }
 
-    public byte impactFromMove(SiteParameters destination){
-        byte impactMod = 0;
+    public short impactFromMove(SiteParameters destination){
+        short impactMod = 0;
         if(this.level == destination.level){
-            return (byte) 0;
+            return (short) 0;
         }
 
         if(this.route.contains(Routes.C) && this.level >= 2){
@@ -33,9 +33,9 @@ public class SiteParameters {
         }
 
         if(this.level < destination.level){
-            return (byte)(-5*destination.level + impactMod);
+            return (short)(-5*destination.level + impactMod);
         } else {
-            return (byte)((-5*destination.level + impactMod)/2);
+            return (short)((-5*destination.level + impactMod)/2);
         }
     }
 
@@ -54,7 +54,7 @@ public class SiteParameters {
         }
     }
 
-    public byte getImpactFromSiteNextDay(){
+    public short getImpactFromSiteNextDay(){
         switch (this.level){
             case 0:
                 return 20;

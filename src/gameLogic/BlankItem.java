@@ -1,8 +1,8 @@
 package gameLogic;
 
 public class BlankItem extends Item{
-    private final byte NIGHT_IMPACT_MOD = 0;
-    private final byte MOVE_IMPACT_MOD = 0;
+    private final short NIGHT_IMPACT_MOD = 0;
+    private final short MOVE_IMPACT_MOD = 0;
 
     public BlankItem() {
         super();

@@ -2,13 +2,20 @@ package gameLogic;
 
 import lombok.Data;
 
+import javax.swing.*;
+
 @Data
 public abstract class Item {
-    protected byte nightImpactMod;
-    protected byte moveImpactMod;
+    protected short nightImpactMod;
+    protected short moveImpactMod;
+    protected JLabel actualSite;
     String name;
 
     public Item() {
+    }
+
+    public boolean equals(Item item){
+        return item.getMoveImpactMod() == this.moveImpactMod && item.getNightImpactMod() == this.nightImpactMod;
     }
 
     @Override
