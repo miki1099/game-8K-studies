@@ -1,10 +1,15 @@
 package gameLogic;
 
 
+import gui.QuickTimeEventDialog;
+import lombok.Setter;
+
 import javax.swing.*;
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 public class GameLogic implements GameLogicInterface{
     private static GameLogic gameLogic;
@@ -12,6 +17,8 @@ public class GameLogic implements GameLogicInterface{
     private List<Item> itemsLeft;
     private Weather weather;
     private short days;
+    @Setter
+    private short quickEventAccMod;
 
     private final short ACCLIMATION_START_VALUE = 20;
     private final WeatherType WEATHER_TYPE_START_VALUE = WeatherType.SUN;
@@ -19,6 +26,7 @@ public class GameLogic implements GameLogicInterface{
     private final short TEMPERATURE_START_VALUE = 5;
     private final boolean POSITIVE_TREND_START_VALUE = false;
     private static final short MAX_HEIGHT_LEVEL = 5;
+    private final int CHANCES_TO_GET_QUICK_TIME_EVENT = 25; // from 0 to 100
 
     private GameLogic(List<JLabel> currentPositions, List<SiteParameters> siteParameters) {
         initGame(currentPositions, siteParameters);
@@ -26,6 +34,9 @@ public class GameLogic implements GameLogicInterface{
 
     public static GameLogic getInstance(List<JLabel> currentPositions, List<SiteParameters> siteParameters){
         gameLogic = new GameLogic(currentPositions, siteParameters);
+        return gameLogic;
+    }
+    public static GameLogic getInstance(){
         return gameLogic;
     }
 
@@ -203,6 +214,17 @@ public class GameLogic implements GameLogicInterface{
         days++;
 
         List<Short> impactBuf = getImpactForNextDay();
+        Random random = new Random();
+        if(CHANCES_TO_GET_QUICK_TIME_EVENT >= random.nextInt(100) + 1){
+            QuickTimeEventDialog quicktimeDialog = new QuickTimeEventDialog(new Frame(),true);
+            quicktimeDialog.setVisible(true);
+        } else{
+            quickEventAccMod = 0;
+        }
+
+        for(int i = 0; i < impactBuf.size(); i++){
+            impactBuf.set(i, (short) (impactBuf.get(i) + quickEventAccMod));
+        }
         for(int i = 0; i < climbers.size(); i++){
             JLabel actualSite = climbers.get(i).getCurrentPosition();
             climbers.get(i).getItem().setActualSite(actualSite);
