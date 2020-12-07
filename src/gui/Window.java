@@ -14,6 +14,7 @@ public class Window extends javax.swing.JFrame {
 
     static MenuPanel menuPanel;
     static GamePanel gamePanel;
+    static ScoreBoardPanel scoreBoardPanel;
     private static final Window WINDOW= new Window();
     /**
      * Creates new form gui.Window
@@ -69,6 +70,8 @@ public class Window extends javax.swing.JFrame {
     public static void gameStart(){
         menuPanel.setVisible(false);
         WINDOW.remove(menuPanel);
+        scoreBoardPanel.setVisible(false);
+        WINDOW.remove(scoreBoardPanel);
         gamePanel = new GamePanel();
         WINDOW.add(gamePanel);
         gamePanel.setVisible(true);
@@ -77,9 +80,24 @@ public class Window extends javax.swing.JFrame {
     public static void exitToMenu(){
         gamePanel.setVisible(false);
         WINDOW.remove(gamePanel);
+        scoreBoardPanel.setVisible(false);
+        WINDOW.remove(scoreBoardPanel);
         gamePanel = null;
         WINDOW.add(menuPanel);
         menuPanel.setVisible(true);
+    }
+
+    public static void scoreBoard(){
+        if(gamePanel != null){
+            gamePanel.setVisible(false);
+            WINDOW.remove(gamePanel);
+        }
+
+        menuPanel.setVisible(false);
+        scoreBoardPanel = ScoreBoardPanel.getInstance();
+        WINDOW.remove(menuPanel);
+        WINDOW.add(scoreBoardPanel);
+        scoreBoardPanel.setVisible(true);
     }
 
     // Variables declaration - do not modify
