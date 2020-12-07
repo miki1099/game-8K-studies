@@ -132,7 +132,7 @@ public class MenuPanel extends javax.swing.JPanel {
     }// </editor-fold>
 
     private void scoreButtonActionPerformed(java.awt.event.ActionEvent evt) {
-        Window.scoreBoard();
+        Window.scoreBoard(0);
     }
 
     private void exitButtonActionPerformed(java.awt.event.ActionEvent evt) {

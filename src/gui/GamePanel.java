@@ -1022,7 +1022,7 @@ public class GamePanel extends javax.swing.JPanel {
     }
 
     public void endGameWin(){
-        //TODO open score board
+        Window.scoreBoard(gameLogic.getWinScore());
     }
     //end game finished methods
 

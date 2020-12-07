@@ -70,35 +70,48 @@ public class Window extends javax.swing.JFrame {
     public static void gameStart(){
         menuPanel.setVisible(false);
         WINDOW.remove(menuPanel);
-        scoreBoardPanel.setVisible(false);
-        WINDOW.remove(scoreBoardPanel);
+        if(scoreBoardPanel != null){
+            scoreBoardPanel.setVisible(false);
+            WINDOW.remove(scoreBoardPanel);
+        }
         gamePanel = new GamePanel();
         WINDOW.add(gamePanel);
         gamePanel.setVisible(true);
     }
 
     public static void exitToMenu(){
-        gamePanel.setVisible(false);
-        WINDOW.remove(gamePanel);
-        scoreBoardPanel.setVisible(false);
-        WINDOW.remove(scoreBoardPanel);
+        if(gamePanel != null){
+            gamePanel.setVisible(false);
+            WINDOW.remove(gamePanel);
+        }
+        if(scoreBoardPanel != null){
+            scoreBoardPanel.setVisible(false);
+            WINDOW.remove(scoreBoardPanel);
+        }
         gamePanel = null;
         WINDOW.add(menuPanel);
         menuPanel.setVisible(true);
     }
 
-    public static void scoreBoard(){
+    public static void scoreBoard(int score){
         if(gamePanel != null){
             gamePanel.setVisible(false);
             WINDOW.remove(gamePanel);
         }
 
         menuPanel.setVisible(false);
-        scoreBoardPanel = ScoreBoardPanel.getInstance();
+        if(score == 0){
+            scoreBoardPanel = ScoreBoardPanel.getInstance();
+        } else{
+            scoreBoardPanel = ScoreBoardPanel.getInstance(score);
+        }
+
         WINDOW.remove(menuPanel);
         WINDOW.add(scoreBoardPanel);
         scoreBoardPanel.setVisible(true);
     }
+
+
 
     // Variables declaration - do not modify
     // End of variables declaration

@@ -296,4 +296,18 @@ public class GameLogic implements GameLogicInterface{
         return  readyToEndGame;
 
     }
+
+    @Override
+    public int getWinScore() {
+        List<Boolean> climbersAlive = checkClimbersAreAlive();
+        int score = 500;
+        for (boolean areAlive : climbersAlive){
+            if(areAlive){
+                score *= 2;
+            }
+        }
+        score -= days;
+
+        return score;
+    }
 }

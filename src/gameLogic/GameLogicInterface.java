@@ -24,4 +24,5 @@ public interface GameLogicInterface {
     public List<JLabel> getCurrentPositionsItemsLeft();
     public boolean doesClimberCanStandOnItem(JLabel climberPosition, JLabel siteToGo);
     public boolean isGameReadyToFinish();
+    public int getWinScore();
 }

@@ -1,6 +1,7 @@
 package gui;
 
 import javax.imageio.ImageIO;
+import javax.persistence.criteria.CriteriaBuilder;
 import java.awt.*;
 import java.io.IOException;
 
@@ -21,12 +22,21 @@ public class ScoreBoardPanel extends javax.swing.JPanel {
     }
 
     public static ScoreBoardPanel getInstance(){
+        INSTANCE.setVisibility(false);
         return INSTANCE;
     }
 
     public static ScoreBoardPanel getInstance(int score){
         //TODO take score into db
+        INSTANCE.setVisibility(true);
         return INSTANCE;
+    }
+
+    private void setVisibility(boolean visibilityMod){
+        INSTANCE.scoreLabel.setVisible(visibilityMod);
+        INSTANCE.userLabel.setVisible(visibilityMod);
+        INSTANCE.saveScoreButon.setVisible(visibilityMod);
+        INSTANCE.jScrollPane1.setVisible(visibilityMod);
     }
 
     @Override
@@ -53,7 +63,7 @@ public class ScoreBoardPanel extends javax.swing.JPanel {
 
         jLabel3 = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
+        userLabel = new javax.swing.JLabel();
         saveScoreButon = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         userName = new javax.swing.JTextArea();
@@ -73,10 +83,10 @@ public class ScoreBoardPanel extends javax.swing.JPanel {
         jLabel1.setText("          SCORE BOARD");
         jLabel1.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
 
-        jLabel2.setFont(new java.awt.Font("Tahoma", 0, 48)); // NOI18N
-        jLabel2.setText("User name:");
-        jLabel2.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jLabel2.setVerticalTextPosition(javax.swing.SwingConstants.TOP);
+        userLabel.setFont(new java.awt.Font("Tahoma", 0, 48)); // NOI18N
+        userLabel.setText("User name:");
+        userLabel.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        userLabel.setVerticalTextPosition(javax.swing.SwingConstants.TOP);
 
         saveScoreButon.setFont(new java.awt.Font("Tahoma", 0, 36)); // NOI18N
         saveScoreButon.setText("save score");
@@ -148,6 +158,11 @@ public class ScoreBoardPanel extends javax.swing.JPanel {
 
         jButton1.setFont(new java.awt.Font("Tahoma", 0, 48)); // NOI18N
         jButton1.setText("Exit to Menu");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         scoreLabel.setFont(new java.awt.Font("Tahoma", 0, 36)); // NOI18N
         scoreLabel.setText("Your score: ");
@@ -164,7 +179,7 @@ public class ScoreBoardPanel extends javax.swing.JPanel {
                                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                                         .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 1183, javax.swing.GroupLayout.PREFERRED_SIZE)
                                                         .addGroup(layout.createSequentialGroup()
-                                                                .addComponent(jLabel2)
+                                                                .addComponent(userLabel)
                                                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 38, Short.MAX_VALUE)
                                                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                                                         .addComponent(scoreLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -187,7 +202,7 @@ public class ScoreBoardPanel extends javax.swing.JPanel {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(userLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addComponent(saveScoreButon, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addGap(38, 38, 38)
                                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 494, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -201,17 +216,21 @@ public class ScoreBoardPanel extends javax.swing.JPanel {
         // TODO add your handling code here:
     }
 
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {
+        Window.exitToMenu();
+    }
+
 
     // Variables declaration - do not modify
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JButton saveScoreButon;
     private javax.swing.JLabel scoreLabel;
     private javax.swing.JTable scoreTable;
+    private javax.swing.JLabel userLabel;
     private javax.swing.JTextArea userName;
     // End of variables declaration
 }
