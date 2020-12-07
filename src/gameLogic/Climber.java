@@ -15,6 +15,7 @@ class Climber {
     private short movesInOneDay;
     private boolean isAlive;
     private boolean madeToTop;
+    private boolean readyToEndGame;
     private Item item;
 
     private final short MOVES_IN_DAY_MOD = -7;

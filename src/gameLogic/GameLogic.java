@@ -63,6 +63,7 @@ public class GameLogic implements GameLogicInterface{
                     .acclimation(ACCLIMATION_START_VALUE)
                     .isAlive(true)
                     .madeToTop(false)
+                    .readyToEndGame(false)
                     .item(item)
                     .movesInOneDay((short) 0)
                     .build());
@@ -107,6 +108,8 @@ public class GameLogic implements GameLogicInterface{
             climberToMove.setSiteParameters(siteParametersToMove);
             if(siteParametersToMove.level == MAX_HEIGHT_LEVEL){
                 climberToMove.setMadeToTop(true);
+            } else if(siteParametersToMove.level == 0 && climberToMove.isMadeToTop()){
+                climberToMove.setReadyToEndGame(true);
             }
 
             Item climberItem = climberToMove.getItem();
@@ -277,6 +280,20 @@ public class GameLogic implements GameLogicInterface{
     public boolean doesClimberCanStandOnItem(JLabel climberPosition, JLabel siteToGo) {
         Item climberItem = getClimberWithSpecificLocation(climberPosition).getItem();
         return !(climberItem instanceof Backpack) && !(climberItem instanceof Tent);
+
+    }
+
+    @Override
+    public boolean isGameReadyToFinish() {
+        boolean readyToEndGame = false;
+        for(Climber climber : climbers){
+            if(!climber.isReadyToEndGame() && climber.isAlive()){
+                return false;
+            } else if(climber.isReadyToEndGame() || !climber.isAlive()){
+                readyToEndGame = true;
+            }
+        }
+        return  readyToEndGame;
 
     }
 }

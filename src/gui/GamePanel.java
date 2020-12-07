@@ -896,7 +896,7 @@ public class GamePanel extends javax.swing.JPanel {
                     updateIcon(ICON_CLIMBER_2_DEAD,  climber2Icons, currPos);
                 }
                 if(deadCounter == climbersAreAliveList.size()){
-                    endGame();
+                    endGameLoose();
                 }
             }
 
@@ -1014,11 +1014,15 @@ public class GamePanel extends javax.swing.JPanel {
     // end moving methods
 
     //game finished methods
-    public void endGame(){
+    public void endGameLoose(){
         JOptionPane.showMessageDialog(this,
                 "Game over\nall climbers are dead",
                 "GAME OVER", JOptionPane.INFORMATION_MESSAGE);
         Window.exitToMenu();
+    }
+
+    public void endGameWin(){
+        //TODO open score board
     }
     //end game finished methods
 
@@ -1035,8 +1039,12 @@ public class GamePanel extends javax.swing.JPanel {
         gameLogic.makeNextDay();
         updateWeather();
         updateDayCounter();
+        if(gameLogic.isGameReadyToFinish()){
+            endGameWin();
+        }
         updateClimbersStatus();
         updatePredictedImpact();
+
     }
 
     private void exitButtonActionPerformed(java.awt.event.ActionEvent evt) {
@@ -1050,7 +1058,7 @@ public class GamePanel extends javax.swing.JPanel {
     }
 
     private void thingsList1ItemStateChanged(java.awt.event.ItemEvent evt) {
-        if(isReadyToChange == true){
+        if(isReadyToChange){
             gameLogic.setItemToClimber((Item) evt.getItem(),0);
             updatePredictedImpact();
         }
@@ -1058,7 +1066,7 @@ public class GamePanel extends javax.swing.JPanel {
     }
 
     private void thingsList2ItemStateChanged(java.awt.event.ItemEvent evt) {
-        if(isReadyToChange == true){
+        if(isReadyToChange){
             gameLogic.setItemToClimber((Item) evt.getItem(),1);
             updatePredictedImpact();
         }

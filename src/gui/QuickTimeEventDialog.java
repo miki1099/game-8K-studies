@@ -39,7 +39,7 @@ public class QuickTimeEventDialog extends javax.swing.JDialog {
         super.setVisible(b);
     }
 
-    private Short startTimer(){
+    private void startTimer(){
         Timer timer = new Timer();
         timer.schedule(new TimerTask() {
             @Override
@@ -48,7 +48,6 @@ public class QuickTimeEventDialog extends javax.swing.JDialog {
                 closeWindow();
             }
         }, TIME_FOR_ANSWER);
-        return acclimationImpact;
 
     }
 
