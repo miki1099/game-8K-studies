@@ -12,4 +12,11 @@ public class UserDao {
         session.getTransaction().commit();
         session.close();
     }
+
+    public User findByName(String name){
+        Session session = HibernateUtil.getSessionFactory().openSession();
+        User user = session.find(User.class, name.trim());
+        session.close();
+        return user;
+    }
 }
