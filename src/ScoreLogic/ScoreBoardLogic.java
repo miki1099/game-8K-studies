@@ -6,6 +6,7 @@ import dao.UserDao;
 import model.Score;
 import model.User;
 
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
@@ -20,13 +21,13 @@ public class ScoreBoardLogic {
 
     public List<Score> getSortedScoreList(){
         List<Score> scores = scoreDao.getAll();
-        scores.sort(Comparator.comparing(Score::getScore));
+        scores.sort(Comparator.comparing(Score::getScore).reversed());
         return scores;
     }
 
-    public void insertUserWithScore(Score score){
-        userDao.insert(score.getUser());
+    public void insertScoreAndUser(Score score){
         scoreDao.insert(score);
+
     }
 
     public int getIdSpecificUser(String userName){
@@ -36,5 +37,9 @@ public class ScoreBoardLogic {
         } else{
             return -1;
         }
+    }
+
+    public User getSpecificUser(String userName){
+        return userDao.findByName(userName);
     }
 }

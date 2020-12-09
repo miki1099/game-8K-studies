@@ -3,6 +3,7 @@ package model;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Cascade;
 
 import javax.persistence.*;
 
@@ -10,6 +11,7 @@ import javax.persistence.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
+
 public class User {
 
     @Id
@@ -19,4 +21,7 @@ public class User {
     @Column(name = "USR_NAME")
     private String name;
 
+    public User(String name) {
+        this.name = name;
+    }
 }

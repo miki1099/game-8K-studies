@@ -1,14 +1,22 @@
 package gui;
 
+import ScoreLogic.ScoreBoardLogic;
+import model.Score;
+import model.User;
+
 import javax.imageio.ImageIO;
-import javax.persistence.criteria.CriteriaBuilder;
+import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.io.IOException;
+import java.time.LocalDate;
+import java.util.List;
 
 public class ScoreBoardPanel extends javax.swing.JPanel {
 
     private static final ScoreBoardPanel INSTANCE = new ScoreBoardPanel();
     private Image img;
+    private final ScoreBoardLogic scoreBoardLogic = new ScoreBoardLogic();
+    private int score;
     /**
      * Creates new form ScoreBoardPanel
      */
@@ -22,14 +30,24 @@ public class ScoreBoardPanel extends javax.swing.JPanel {
     }
 
     public static ScoreBoardPanel getInstance(){
+        INSTANCE.showScoreList();
+        INSTANCE.repaint();
         INSTANCE.setVisibility(false);
         return INSTANCE;
     }
 
     public static ScoreBoardPanel getInstance(int score){
-        //TODO take score into db
+        INSTANCE.saveScoreButon.setEnabled(true);
+        INSTANCE.showScoreToUser(score);
+        INSTANCE.score = score;
+        INSTANCE.showScoreList();
+        INSTANCE.repaint();
         INSTANCE.setVisibility(true);
         return INSTANCE;
+    }
+
+    private void showScoreToUser(int score){
+        scoreLabel.setText("Your score: " + score);
     }
 
     private void setVisibility(boolean visibilityMod){
@@ -37,6 +55,52 @@ public class ScoreBoardPanel extends javax.swing.JPanel {
         INSTANCE.userLabel.setVisible(visibilityMod);
         INSTANCE.saveScoreButon.setVisible(visibilityMod);
         INSTANCE.jScrollPane1.setVisible(visibilityMod);
+    }
+
+    private void showScoreList(){
+        List<Score> scores = scoreBoardLogic.getSortedScoreList();
+        Object[][] data = getScoresArray(scores);
+        scoreTable.setModel(new DefaultTableModel(data,
+                new String [] {
+                "No.", "User", "Score", "Date"
+        }) {
+            @Override
+            public boolean isCellEditable(int row, int column)
+            {
+                return false;
+            }
+        });
+    }
+
+    private Object[][] getScoresArray(List<Score> scores){
+        Object[][] returnArray = new Object[scores.size()][4];
+        for(int i = 0; i < scores.size(); i++){
+            Score bufScore = scores.get(i);
+            returnArray[i][0] = i+1;
+            returnArray[i][1] = bufScore.getUser().getName();
+            returnArray[i][2] = bufScore.getScore();
+            returnArray[i][3] = bufScore.getDate().toString();
+
+        }
+        return returnArray;
+    }
+
+    private void addUserWithScore(){
+        String userName = this.userNameTextArea.getText();
+        if(userName == null || userName.equals("")){
+            this.userNameTextArea.setText("User can't be null!");
+        }else{
+            User user = scoreBoardLogic.getSpecificUser(userName);
+            if(user == null){
+                User newUser = new User(userName);
+                scoreBoardLogic.insertScoreAndUser(new Score(LocalDate.now(), score, newUser));
+            } else{
+                scoreBoardLogic.insertScoreAndUser(new Score(LocalDate.now(), score, user));
+            }
+            saveScoreButon.setEnabled(false);
+            userNameTextArea.setText("");
+            showScoreList();
+        }
     }
 
     @Override
@@ -66,7 +130,7 @@ public class ScoreBoardPanel extends javax.swing.JPanel {
         userLabel = new javax.swing.JLabel();
         saveScoreButon = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
-        userName = new javax.swing.JTextArea();
+        userNameTextArea = new javax.swing.JTextArea();
         jScrollPane2 = new javax.swing.JScrollPane();
         scoreTable = new javax.swing.JTable();
         jButton1 = new javax.swing.JButton();
@@ -96,42 +160,14 @@ public class ScoreBoardPanel extends javax.swing.JPanel {
             }
         });
 
-        userName.setColumns(20);
-        userName.setFont(new java.awt.Font("Monospaced", 0, 48)); // NOI18N
-        userName.setRows(1);
-        jScrollPane1.setViewportView(userName);
+        userNameTextArea.setColumns(20);
+        userNameTextArea.setFont(new java.awt.Font("Monospaced", 0, 48)); // NOI18N
+        userNameTextArea.setRows(1);
+        jScrollPane1.setViewportView(userNameTextArea);
 
-        scoreTable.setFont(new java.awt.Font("Tahoma", 0, 36)); // NOI18N
+        scoreTable.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         scoreTable.setModel(new javax.swing.table.DefaultTableModel(
                 new Object [][] {
-                        {null, null, null, null},
-                        {null, null, null, null},
-                        {null, null, null, null},
-                        {null, null, null, null},
-                        {null, null, null, null},
-                        {null, null, null, null},
-                        {null, null, null, null},
-                        {null, null, null, null},
-                        {null, null, null, null},
-                        {null, null, null, null},
-                        {null, null, null, null},
-                        {null, null, null, null},
-                        {null, null, null, null},
-                        {null, null, null, null},
-                        {null, null, null, null},
-                        {null, null, null, null},
-                        {null, null, null, null},
-                        {null, null, null, null},
-                        {null, null, null, null},
-                        {null, null, null, null},
-                        {null, null, null, null},
-                        {null, null, null, null},
-                        {null, null, null, null},
-                        {null, null, null, null},
-                        {null, null, null, null},
-                        {null, null, null, null},
-                        {null, null, null, null},
-                        {null, null, null, null},
                         {null, null, null, null}
                 },
                 new String [] {
@@ -213,7 +249,7 @@ public class ScoreBoardPanel extends javax.swing.JPanel {
     }// </editor-fold>
 
     private void saveScoreButonActionPerformed(java.awt.event.ActionEvent evt) {
-        // TODO add your handling code here:
+        INSTANCE.addUserWithScore();
     }
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {
@@ -231,7 +267,7 @@ public class ScoreBoardPanel extends javax.swing.JPanel {
     private javax.swing.JLabel scoreLabel;
     private javax.swing.JTable scoreTable;
     private javax.swing.JLabel userLabel;
-    private javax.swing.JTextArea userName;
+    private javax.swing.JTextArea userNameTextArea;
     // End of variables declaration
 }
 
