@@ -4,6 +4,7 @@ import gameLogic.GameLogic;
 import lombok.Getter;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.WindowEvent;
 import java.util.Timer;
 import java.io.*;
@@ -26,6 +27,8 @@ public class QuickTimeEventDialog extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
         acclimationImpact = -10;
+        Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+        this.setLocation(dim.width/2-this.getSize().width/2, dim.height/2-this.getSize().height/2);
         try {
             getQuestion();
         } catch (IOException e) {

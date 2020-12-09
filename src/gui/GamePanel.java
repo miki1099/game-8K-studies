@@ -23,6 +23,7 @@ public class GamePanel extends javax.swing.JPanel {
     private boolean isGoingToMoveClimber;
     private JLabel currentPositionReadyToMove;
     private boolean isReadyToChange;
+    private boolean isGameLost;
     private final Icon ICON_CLIMBER_1 = new ImageIcon(getClass().getResource("/gui/Graphics/climber.png"));
     private final Icon ICON_CLIMBER_2 = new ImageIcon(getClass().getResource("/gui/Graphics/climber (1).png"));
     private final Icon ICON_CLIMBER_1_DEAD = new ImageIcon(getClass().getResource("/gui/Graphics/climber dead.png"));
@@ -58,6 +59,7 @@ public class GamePanel extends javax.swing.JPanel {
     }
 
     private void gamePrepare(){
+        isGameLost = false;
         climber1Icons = new ArrayList<>();
         climber2Icons = new ArrayList<>();
         sitesWithParametersMapLeft = new HashMap<>();
@@ -1019,6 +1021,7 @@ public class GamePanel extends javax.swing.JPanel {
                 "Game over\nall climbers are dead",
                 "GAME OVER", JOptionPane.INFORMATION_MESSAGE);
         Window.exitToMenu();
+        isGameLost = true;
     }
 
     public void endGameWin(){
@@ -1039,11 +1042,12 @@ public class GamePanel extends javax.swing.JPanel {
         gameLogic.makeNextDay();
         updateWeather();
         updateDayCounter();
-        if(gameLogic.isGameReadyToFinish()){
-            endGameWin();
-        }
         updateClimbersStatus();
         updatePredictedImpact();
+        if(gameLogic.isGameReadyToFinish() && !isGameLost){
+            endGameWin();
+        }
+
 
     }
 
