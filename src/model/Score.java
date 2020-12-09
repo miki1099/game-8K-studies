@@ -19,6 +19,8 @@ public class Score {
     private int id;
     @Column(name = "SC_DATE")
     private LocalDate date;
+    @Column(name = "SC_SCORE")
+    private int score;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "SC_USR_ID", referencedColumnName = "USR_ID")
     private User user;
