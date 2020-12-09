@@ -8,9 +8,8 @@ public class UserDao {
     public void insert(User user){
         Session session = HibernateUtil.getSessionFactory().openSession();
         session.beginTransaction();
-        session.persist(user);
+        session.merge(user);
         session.getTransaction().commit();
-        session.flush();
         session.close();
     }
 }

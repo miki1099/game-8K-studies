@@ -11,7 +11,7 @@ public class ScoreDao {
         Session session = HibernateUtil.getSessionFactory().openSession();
         List foundList = session.createQuery("select s " +
                 "from Score s " +
-                "left join fetch all properties s.user").getResultList();
+                "left join fetch s.user").getResultList();
         session.close();
         return foundList;
     }
@@ -19,9 +19,8 @@ public class ScoreDao {
     public void insert(Score score){
         Session session = HibernateUtil.getSessionFactory().openSession();
         session.beginTransaction();
-        session.persist(score);
+        session.merge(score);
         session.getTransaction().commit();
-        session.flush();
         session.close();
     }
 }
