@@ -1025,7 +1025,15 @@ public class GamePanel extends javax.swing.JPanel {
     }
 
     public void endGameWin(){
-        Window.scoreBoard(gameLogic.getWinScore());
+        if(Window.isDataBaseConnected){
+            Window.scoreBoard(gameLogic.getWinScore());
+        } else{
+            JOptionPane.showMessageDialog(this,
+                    "Database is not available\nyour score is: " + gameLogic.getWinScore(),
+                    "YOU WON GAME", JOptionPane.INFORMATION_MESSAGE);
+            Window.exitToMenu();
+        }
+
     }
     //end game finished methods
 

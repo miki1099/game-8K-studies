@@ -4,7 +4,11 @@ package gui;/*
  * and open the template in the editor.
  */
 
+import util.HibernateUtil;
+
 import java.awt.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
 
 /**
  *
@@ -15,6 +19,7 @@ public class Window extends javax.swing.JFrame {
     static MenuPanel menuPanel;
     static GamePanel gamePanel;
     static ScoreBoardPanel scoreBoardPanel;
+    static boolean isDataBaseConnected = true;
     private static final Window WINDOW= new Window();
     /**
      * Creates new form gui.Window
@@ -23,6 +28,11 @@ public class Window extends javax.swing.JFrame {
         initComponents();
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
         this.setLocation(dim.width/2-this.getSize().width/2, dim.height/2-this.getSize().height/2);
+//        try{
+//            HibernateUtil.getSessionFactory();
+//        } catch (Exception e){
+//            isDataBaseConnected = false;
+//        }
     }
 
     public static Window getInstance(){
@@ -58,13 +68,23 @@ public class Window extends javax.swing.JFrame {
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
          * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html
          */
-
+        String url = "jdbc:mysql://localhost:3306"; //pointing to no database.
+        String username = "root";
+        String password = "root1234";
+        try (Connection connection = DriverManager.getConnection(url, username, password)) {
+            if(connection != null) connection.close();
+        } catch (Exception e){
+            Window.isDataBaseConnected = false;
+        }
         Window window = getInstance();
         menuPanel = MenuPanel.getInstance();
         menuPanel.setVisible(true);
         window.add(menuPanel);
 
         window.setVisible(true);
+
+
+
     }
 
     public static void gameStart(){

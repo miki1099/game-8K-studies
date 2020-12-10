@@ -4,6 +4,7 @@ package gui;/*
  * and open the template in the editor.
  */
 
+
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Image;
@@ -28,6 +29,7 @@ public class MenuPanel extends javax.swing.JPanel {
             ex.printStackTrace();
         }
         initComponents();
+        checkScoreBoardActive();
 
     }
     public static MenuPanel getInstance(){
@@ -45,6 +47,12 @@ public class MenuPanel extends javax.swing.JPanel {
 
     public Dimension getPreferredSize() {
         return img == null ? super.getPreferredSize() : new Dimension(img.getWidth(this), img.getHeight(this));
+    }
+
+    private void checkScoreBoardActive(){
+        if(!Window.isDataBaseConnected){
+            scoreButton.setEnabled(false);
+        }
     }
     /**
      * This method is called from within the constructor to initialize the form.
