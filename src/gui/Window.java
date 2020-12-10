@@ -68,7 +68,7 @@ public class Window extends javax.swing.JFrame {
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
          * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html
          */
-        String url = "jdbc:mysql://localhost:3306"; //pointing to no database.
+        String url = "jdbc:mysql://localhost:3306?serverTimezone=CET"; //pointing to no database.
         String username = "root";
         String password = "root1234";
         try (Connection connection = DriverManager.getConnection(url, username, password)) {

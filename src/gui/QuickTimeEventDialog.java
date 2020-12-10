@@ -20,6 +20,7 @@ public class QuickTimeEventDialog extends javax.swing.JDialog {
     @Getter
     private Short acclimationImpact;
     private final int TIME_FOR_ANSWER = 5000; // 5sec
+    private Timer timer;
     /**
      * Creates new form QuickTimeEventDialog
      */
@@ -33,6 +34,7 @@ public class QuickTimeEventDialog extends javax.swing.JDialog {
             getQuestion();
         } catch (IOException e) {
             acclimationImpact = 0;
+            closeWindow();
         }
     }
 
@@ -43,7 +45,7 @@ public class QuickTimeEventDialog extends javax.swing.JDialog {
     }
 
     private void startTimer(){
-        Timer timer = new Timer();
+        timer = new Timer();
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
@@ -111,6 +113,7 @@ public class QuickTimeEventDialog extends javax.swing.JDialog {
     }
 
     private void closeWindow(){
+        timer.cancel();
         QuickTimeEventDialog.this.setVisible(false);
         this.dispose();
         QuickTimeEventDialog.this.dispatchEvent(new WindowEvent(
