@@ -6,6 +6,10 @@ import javax.swing.*;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Interface for game logic
+ * @author Michal Glodek
+ */
 public interface GameLogicInterface {
     public List<Short> getClimbersAcclimation();
     public List<Boolean> checkClimbersAreAlive();

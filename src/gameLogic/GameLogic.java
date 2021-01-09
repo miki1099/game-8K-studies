@@ -11,35 +11,70 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
+/**
+ * game logic - main core of game algorithms
+ * @author Michal Glodek
+ */
 public class GameLogic implements GameLogicInterface{
+    /** own instance singleton*/
     private static GameLogic gameLogic;
+    /** list of climbers */
     private List<Climber> climbers;
+    /** items left on the game board */
     private List<Item> itemsLeft;
+    /** actual weather */
     private Weather weather;
+    /** dayc counter */
     private short days;
+    /** impact from quick events */
     @Setter
     private short quickEventAccMod;
 
+    /** climbers starts with this amount of acclimation */
     private final short ACCLIMATION_START_VALUE = 20;
+    /** type of weather for start */
     private final WeatherType WEATHER_TYPE_START_VALUE = WeatherType.SUN;
+    /** trend weather days from start */
     private final short WEATHER_TREND_DAYS_START_VALUE = 2;
+    /** initial temperature value */
     private final short TEMPERATURE_START_VALUE = 5;
+    /** initial trend for temperature*/
     private final boolean POSITIVE_TREND_START_VALUE = false;
+    /** max level of height */
     private static final short MAX_HEIGHT_LEVEL = 5;
-    private final int CHANCES_TO_GET_QUICK_TIME_EVENT = 25; // from 0 to 100
+    /** chances to get quick time event in % */
+    private final int CHANCES_TO_GET_QUICK_TIME_EVENT = 20; // from 0 to 100
 
+    /**
+     * Creates new GameLogic
+     * @param currentPositions list current climbers positions
+     * @param siteParameters list os site parameters
+     */
     private GameLogic(List<JLabel> currentPositions, List<SiteParameters> siteParameters) {
         initGame(currentPositions, siteParameters);
     }
 
+    /**
+     * method to get instance and it creates new instance
+     * @return new game logic instance
+     */
     public static GameLogic getInstance(List<JLabel> currentPositions, List<SiteParameters> siteParameters){
         gameLogic = new GameLogic(currentPositions, siteParameters);
         return gameLogic;
     }
+    /**
+     * return game logic instance
+     * @return game logic instance
+     */
     public static GameLogic getInstance(){
         return gameLogic;
     }
 
+    /**
+     * method initialize game
+     * @param currentPositions list current climbers positions
+     * @param siteParameters list os site parameters
+     */
     private void initGame(List<JLabel> currentPositions, List<SiteParameters> siteParameters){
         days = 1;
 
@@ -78,6 +113,10 @@ public class GameLogic implements GameLogicInterface{
                 .build();
     }
 
+    /**
+     * returns climbers acclimation
+     * @return list of climbers actual acclimation
+     */
     @Override
     public List<Short> getClimbersAcclimation(){
         List<Short> accList = new ArrayList<>();
@@ -87,6 +126,10 @@ public class GameLogic implements GameLogicInterface{
         return accList;
     }
 
+    /**
+     * checks if climbers are alive
+     * @return boolean list if they are alive
+     */
     @Override
     public List<Boolean> checkClimbersAreAlive(){
         List<Boolean> aliveList = new ArrayList<>();
@@ -96,6 +139,14 @@ public class GameLogic implements GameLogicInterface{
         return aliveList;
     }
 
+    /**
+     * checks it climber can go, moves climber and make impact on moving climber
+     * @param sitesMap all sites map
+     * @param siteToGo site with climber want to go
+     * @param currentPosition climber current position
+     * @param impactFromMove basic impact from move
+     * @return boolean if move was legal to do
+     */
     @Override
     public boolean moveClimberAndShowResults(Map<JLabel, SiteParameters> sitesMap, JLabel siteToGo, JLabel currentPosition, short impactFromMove){
         Climber climberToMove = getClimberWithSpecificLocation(currentPosition);
@@ -135,6 +186,13 @@ public class GameLogic implements GameLogicInterface{
 
     }
 
+    /**
+     * method calculate impact on moving climber
+     * @param sitesMap all sites map
+     * @param siteToGo site with climber want to go
+     * @param currentPosition climber current position
+     * @return impact on climber
+     */
     @Override
     public short getImpactFromMoving(Map<JLabel, SiteParameters> sitesMap, JLabel siteToGo, JLabel currentPosition) {
         Climber climberToMove = getClimberWithSpecificLocation(currentPosition);
@@ -155,6 +213,11 @@ public class GameLogic implements GameLogicInterface{
         } else return 127;
     }
 
+    /**
+     * gives user object with stand on given site
+     * @param currentPosition current position co search
+     * @return climber object
+     */
     private Climber getClimberWithSpecificLocation(JLabel currentPosition){
         for(Climber climber : climbers){
             if(climber.getCurrentPosition().equals(currentPosition)){
@@ -164,6 +227,11 @@ public class GameLogic implements GameLogicInterface{
         return null;
     }
 
+    /**
+     * makes impact on specific climber
+     * @param climber climber to take impact
+     * @param impact impact value
+     */
     @Override
     public void makeImpactOnClimber(Climber climber, short impact){
         if(climber.isAlive()){
@@ -180,6 +248,10 @@ public class GameLogic implements GameLogicInterface{
         }
     }
 
+    /**
+     * returns climbers positions
+     * @return list of climbers positions
+     */
     @Override
     public List<JLabel> getCurrentClimbersPosition(){
         List<JLabel> currPos= new ArrayList<>();
@@ -189,16 +261,28 @@ public class GameLogic implements GameLogicInterface{
         return currPos;
     }
 
+    /**
+     * returns actual temperature
+     * @return actual temperature
+     */
     @Override
     public short getTemperature() {
         return weather.getTemperature();
     }
 
+    /**
+     * returns actual weather type
+     * @return actual weather type
+     */
     @Override
     public WeatherType getWeatherType() {
         return weather.getWeatherType();
     }
 
+    /**
+     * return calculated impact for the next day
+     * @return impact list
+     */
     @Override
     public List<Short> getImpactForNextDay() {
         short nightWeatherImpact = 0;
@@ -212,6 +296,9 @@ public class GameLogic implements GameLogicInterface{
         return nightImpactList;
     }
 
+    /**
+     * makes all changes on climber and weather for next day
+     */
     @Override
     public void makeNextDay() {
         days++;
@@ -237,11 +324,19 @@ public class GameLogic implements GameLogicInterface{
         weather.generateNewWeather();
     }
 
+    /**
+     * returns actual day
+     * @return actual day
+     */
     @Override
     public short getDay() {
         return days;
     }
 
+    /**
+     * returns actual climber list items
+     * @return items list
+     */
     @Override
     public List<Item> getItemsList() {
         List<Item> itemsList = new ArrayList<>();
@@ -252,6 +347,11 @@ public class GameLogic implements GameLogicInterface{
         return itemsList;
     }
 
+    /**
+     * set item to specific climber
+     * @param which which climber
+     * @param item which item
+     */
     @Override
     public void setItemToClimber(Item item, int which) {
         Item itemToLeave = climbers.get(which).getItem();
@@ -262,11 +362,19 @@ public class GameLogic implements GameLogicInterface{
 
     }
 
+    /**
+     * getter list items left on game board
+     * @return list items left on game board
+     */
     @Override
     public List<Item> getItemsLeft() {
         return itemsLeft;
     }
 
+    /**
+     * getter list items position
+     * @return list items position
+     */
     @Override
     public List<JLabel> getCurrentPositionsItemsLeft() {
         List<JLabel> currItemPos= new ArrayList<>();
@@ -276,6 +384,10 @@ public class GameLogic implements GameLogicInterface{
         return currItemPos;
     }
 
+    /**
+     * checks if climber can get other item
+     * @return boolean if he can
+     */
     @Override
     public boolean doesClimberCanStandOnItem(JLabel climberPosition, JLabel siteToGo) {
         Item climberItem = getClimberWithSpecificLocation(climberPosition).getItem();
@@ -283,6 +395,10 @@ public class GameLogic implements GameLogicInterface{
 
     }
 
+    /**
+     * checks if game is ready to end
+     * @return boolean
+     */
     @Override
     public boolean isGameReadyToFinish() {
         boolean readyToEndGame = false;
@@ -297,6 +413,10 @@ public class GameLogic implements GameLogicInterface{
 
     }
 
+    /**
+     * calculate game score
+     * @return game score
+     */
     @Override
     public int getWinScore() {
         List<Boolean> climbersAlive = checkClimbersAreAlive();

@@ -4,11 +4,22 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * Site parameters class can count impact for climber and check move legality
+ * @author Michal Glodek
+ */
 public class SiteParameters {
+    /** site level (height) */
     public short level;
+    /** routes with goes by site */
     public List<Routes> route;
 
-
+    /**
+     * Creates site parameters
+     * @param level height
+     * @param baseRoute min 1 route has to go by site
+     * @param routes other optional routes
+     */
     public SiteParameters(short level,Routes baseRoute, Routes ...routes) {
         route = new ArrayList<>();
         this.level = level;
@@ -16,10 +27,20 @@ public class SiteParameters {
         Collections.addAll(this.route, routes);
     }
 
+    /**
+     * compare objects by level and routes
+     * @param obj other site parameters to compare
+     * @return true if equal else false
+     */
     public boolean equals(SiteParameters obj) {
         return (this.level == obj.level && this.route.equals(obj.route));
     }
 
+    /**
+     * calculate impact from move
+     * @param destination parameters of destination site
+     * @return impact on climber
+     */
     public short impactFromMove(SiteParameters destination){
         short impactMod = 0;
         if(this.level == destination.level){
@@ -39,6 +60,11 @@ public class SiteParameters {
         }
     }
 
+    /**
+     * checks if move is legal by level and reoutes
+     * @param site1 destination site parameters
+     * @return boolean
+     */
     public boolean isLegalToMove( SiteParameters site1){
         boolean contains = false;
         if(Math.abs(site1.level - this.level) <= 1){
@@ -54,6 +80,10 @@ public class SiteParameters {
         }
     }
 
+    /**
+     * give impact from height for next day
+     * @return impact on climbers
+     */
     public short getImpactFromSiteNextDay(){
         switch (this.level){
             case 0:
