@@ -7,7 +7,15 @@ import util.HibernateUtil;
 import javax.persistence.NoResultException;
 import java.util.List;
 
+/**
+ * User dao gives methods to use data in database
+ * @author Michal Glodek
+ */
 public class UserDao {
+
+    /**
+     * Inserts User to database
+     */
     public void insert(User user){
         Session session = HibernateUtil.getSessionFactory().openSession();
         session.beginTransaction();
@@ -16,6 +24,11 @@ public class UserDao {
         session.close();
     }
 
+    /**
+     * Find and return User with the same name
+     * @param name user name
+     * @return User object
+     */
     public User findByName(String name){
         try{
             Session session = HibernateUtil.getSessionFactory().openSession();

@@ -11,15 +11,19 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 
 /**
- *
+ * Main class Frame for app
  * @author mikig
  */
 public class Window extends javax.swing.JFrame {
-
+    /** Menu panel */
     static MenuPanel menuPanel;
+    /** Game panel */
     static GamePanel gamePanel;
+    /** Scoreboard JPanel */
     static ScoreBoardPanel scoreBoardPanel;
+    /** if there is database connection */
     static boolean isDataBaseConnected = true;
+    /** Manin frame for app */
     private static final Window WINDOW= new Window();
     /**
      * Creates new form gui.Window
@@ -60,7 +64,7 @@ public class Window extends javax.swing.JFrame {
     }// </editor-fold>
 
     /**
-     * @param args the command line arguments
+     * main function starts with menu panel visible
      */
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
@@ -86,7 +90,9 @@ public class Window extends javax.swing.JFrame {
 
 
     }
-
+    /**
+    * Starts game sets game panel visible other Invisible
+     */
     public static void gameStart(){
         menuPanel.setVisible(false);
         WINDOW.remove(menuPanel);
@@ -99,6 +105,9 @@ public class Window extends javax.swing.JFrame {
         gamePanel.setVisible(true);
     }
 
+    /**
+     * Show menu panel other invisible
+     */
     public static void exitToMenu(){
         if(gamePanel != null){
             gamePanel.setVisible(false);
@@ -113,6 +122,9 @@ public class Window extends javax.swing.JFrame {
         menuPanel.setVisible(true);
     }
 
+    /**
+     * Show Scoreboard panel other invisible
+     */
     public static void scoreBoard(int score){
         if(gamePanel != null){
             gamePanel.setVisible(false);
@@ -130,9 +142,4 @@ public class Window extends javax.swing.JFrame {
         WINDOW.add(scoreBoardPanel);
         scoreBoardPanel.setVisible(true);
     }
-
-
-
-    // Variables declaration - do not modify
-    // End of variables declaration
 }

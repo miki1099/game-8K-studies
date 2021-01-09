@@ -11,18 +11,27 @@ import java.io.*;
 import java.util.Random;
 import java.util.TimerTask;
 
-
+/**
+ * Gui class to show quick time event while game
+ * @author Michal Glodek
+ */
 public class QuickTimeEventDialog extends javax.swing.JDialog {
 
-
+    /** Store correct answer */
     private String correctAns;
+    /** path where questions are stored */
     private final String filename = "src/gui/quick-time-questions/questions.que";
+    /** It stores impact for climbers  */
     @Getter
     private Short acclimationImpact;
+    /** Max time for answer  */
     private final int TIME_FOR_ANSWER = 5000; // 5sec
+    /** Timer */
     private Timer timer;
     /**
      * Creates new form QuickTimeEventDialog
+     * @param parent frame where to show
+     * @param modal is modal
      */
     public QuickTimeEventDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
@@ -38,12 +47,19 @@ public class QuickTimeEventDialog extends javax.swing.JDialog {
         }
     }
 
+    /**
+     * call function startTimer and call setVisible JDialog class
+     * @param b is visible
+     */
     @Override
     public void setVisible(boolean b) {
         startTimer();
         super.setVisible(b);
     }
 
+    /**
+     * Starts timer
+     */
     private void startTimer(){
         timer = new Timer();
         timer.schedule(new TimerTask() {
@@ -56,6 +72,9 @@ public class QuickTimeEventDialog extends javax.swing.JDialog {
 
     }
 
+    /**
+     * Gets question and answers from txt file
+     */
     private void getQuestion() throws IOException {
         BufferedReader in = new BufferedReader(new FileReader(filename));
         String lineBuffer;
@@ -84,23 +103,39 @@ public class QuickTimeEventDialog extends javax.swing.JDialog {
         in.close();
     }
 
+    /**
+     * Randomise question to show
+     */
     private int getRandomQuestion(int questionsNumber){
         Random rand = new Random();
         return rand.nextInt(questionsNumber);
     }
 
+    /**
+     * Button A pressed call function checkAnswer
+     */
     private void aButtonActionPerformed(java.awt.event.ActionEvent evt) {
         checkAnswer("A");
     }
 
+    /**
+     * Button B pressed call function checkAnswer
+     */
     private void bButtonActionPerformed(java.awt.event.ActionEvent evt) {
         checkAnswer("B");
     }
 
+    /**
+     * Button C pressed call function checkAnswer
+     */
     private void cButtonActionPerformed(java.awt.event.ActionEvent evt) {
         checkAnswer("C");
     }
 
+    /**
+     * check answer sets acclimationImpact and close dialog window.
+     * @param chosen chosen answer alias
+     */
     private void checkAnswer(String chosen){
         JOptionPane.showMessageDialog(null,"Correct answer was " + correctAns);
         if(correctAns.trim().toUpperCase().equals(chosen)){
@@ -112,6 +147,9 @@ public class QuickTimeEventDialog extends javax.swing.JDialog {
         closeWindow();
     }
 
+    /**
+     * Closes window
+     */
     private void closeWindow(){
         timer.cancel();
         QuickTimeEventDialog.this.setVisible(false);
@@ -217,12 +255,19 @@ public class QuickTimeEventDialog extends javax.swing.JDialog {
 
 
     // Variables declaration - do not modify
+    /** Choose ans A button */
     private javax.swing.JButton aButton;
+    /** Shows answer A */
     private javax.swing.JLabel answerA;
+    /** Shows answer B */
     private javax.swing.JLabel answerB;
+    /** Shows answer C */
     private javax.swing.JLabel answerC;
+    /** Choose ans B button */
     private javax.swing.JButton bButton;
+    /** Choose ans C button */
     private javax.swing.JButton cButton;
+    /** Shows question */
     private javax.swing.JLabel questionLabel;
     // End of variables declaration
 }

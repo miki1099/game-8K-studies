@@ -13,11 +13,13 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 /**
- *
+ * Gui menu class
  * @author mikig
  */
 public class MenuPanel extends javax.swing.JPanel {
+    /** Instance MenuPanel class */
     private static final MenuPanel MENU_PANEL = new MenuPanel();
+    /** Background instance class */
     private Image img;
     /**
      * Creates new form gui.MenuPanel
@@ -32,6 +34,10 @@ public class MenuPanel extends javax.swing.JPanel {
         checkScoreBoardActive();
 
     }
+    /**
+     * Return MenuPanel instance
+     * @return MenuPanel instance
+     */
     public static MenuPanel getInstance(){
         return MENU_PANEL;
     }
@@ -45,10 +51,14 @@ public class MenuPanel extends javax.swing.JPanel {
         }
     }
 
+
     public Dimension getPreferredSize() {
         return img == null ? super.getPreferredSize() : new Dimension(img.getWidth(this), img.getHeight(this));
     }
 
+    /**
+     * Checks database connection and set button enable or not
+     */
     private void checkScoreBoardActive(){
         if(!Window.isDataBaseConnected){
             scoreButton.setEnabled(false);
@@ -139,22 +149,35 @@ public class MenuPanel extends javax.swing.JPanel {
         exitButton.getAccessibleContext().setAccessibleName("scoreButton");
     }// </editor-fold>
 
+    /**
+     * open Scoreboard panel
+     */
     private void scoreButtonActionPerformed(java.awt.event.ActionEvent evt) {
         Window.scoreBoard(0);
     }
 
+    /**
+     * close application
+     */
     private void exitButtonActionPerformed(java.awt.event.ActionEvent evt) {
         Window window = Window.getInstance();
         window.dispatchEvent(new WindowEvent(window, WindowEvent.WINDOW_CLOSING));
     }
 
+    /**
+     * starts game
+     */
     private void startButtonActionPerformed(java.awt.event.ActionEvent evt) {
         Window.gameStart();
     }
     // Variables declaration - do not modify
+    /** (Generated) */
     private javax.swing.JButton scoreButton;
+    /** (Generated) */
     private javax.swing.JLabel jLabel1;
+    /** (Generated) */
     private javax.swing.JButton startButton;
+    /** (Generated) */
     private javax.swing.JButton exitButton;
     // End of variables declaration
 }

@@ -11,27 +11,45 @@ import java.util.Map;
 
 
 /**
- *
+ * Gui game panel main game view
  * @author mikig
  */
 public class GamePanel extends javax.swing.JPanel {
+    /** Game logic instance */
     private GameLogic gameLogic;
+    /** List where are climber 1 icons in JLabels */
     private List<JLabel> climber1Icons;
+    /** List where are climber 2 icons in JLabels */
     private List<JLabel> climber2Icons;
+    /** Map with sites JLabel and it's parameters left */
     private Map<JLabel, SiteParameters> sitesWithParametersMapLeft;
+    /** Map with sites JLabel and it's parameters right */
     private Map<JLabel, SiteParameters> sitesWithParametersMapRight;
+    /** Checks if climber is clicked to move */
     private boolean isGoingToMoveClimber;
+    /** Label where is climber witch want to move */
     private JLabel currentPositionReadyToMove;
+    /** Confirm takt other method can change items list */
     private boolean isReadyToChange;
+    /** Is game lost */
     private boolean isGameLost;
+    /** Alive climber 1 icon */
     private final Icon ICON_CLIMBER_1 = new ImageIcon(getClass().getResource("/gui/Graphics/climber.png"));
+    /** Alive climber 2 icon */
     private final Icon ICON_CLIMBER_2 = new ImageIcon(getClass().getResource("/gui/Graphics/climber (1).png"));
+    /** Dead climber 1 icon */
     private final Icon ICON_CLIMBER_1_DEAD = new ImageIcon(getClass().getResource("/gui/Graphics/climber dead.png"));
+    /** Dead climber 2 icon */
     private final Icon ICON_CLIMBER_2_DEAD = new ImageIcon(getClass().getResource("/gui/Graphics/climber (1) dead.png"));
+    /** Weather icon sunny */
     private final Icon ICON_SUN = new ImageIcon(getClass().getResource("/gui/Graphics/sunny.png"));
+    /** Weather icon clouds */
     private final Icon ICON_CLOUDS = new ImageIcon(getClass().getResource("/gui/Graphics/clouds.png"));
+    /** Weather icon snow */
     private final Icon ICON_SNOW = new ImageIcon(getClass().getResource("/gui/Graphics/snow.png"));
+    /** Items icon backpack */
     private final Icon ICON_BACKPACK = new ImageIcon(getClass().getResource("/gui/Graphics/backpack.png"));
+    /** Items icon tent */
     private final Icon ICON_TENT = new ImageIcon(getClass().getResource("/gui/Graphics/camping.png"));
 
     /**
@@ -48,6 +66,10 @@ public class GamePanel extends javax.swing.JPanel {
         updatePredictedImpact();
     }
 
+    /**
+     *
+     * Creates sites set current climbers positions
+     */
     private void constructGameLogicInstance(){
         List<JLabel> currentPosLabels = new ArrayList<>();
         List<SiteParameters> siteParameters = new ArrayList<>();
@@ -58,6 +80,10 @@ public class GamePanel extends javax.swing.JPanel {
         gameLogic = GameLogic.getInstance(currentPosLabels, siteParameters);
     }
 
+    /**
+     *
+     * Mapping sites, adds climber icons to list
+     */
     private void gamePrepare(){
         isGameLost = false;
         climber1Icons = new ArrayList<>();
@@ -85,6 +111,10 @@ public class GamePanel extends javax.swing.JPanel {
 
     }
 
+    /**
+     *
+     * Method that create Map os sites with their parameters
+     */
     private void siteMappingMethod(Map<JLabel, SiteParameters> sitesWithParametersMap, JLabel base, JLabel secondSite,
                                    JLabel thirdSiteCRoute, JLabel fourthSiteCRoute, JLabel fifthSiteCRoute,
                                    JLabel topSite, JLabel thirdSite, JLabel fourthSiteDRoute, JLabel fifthSiteDRoute,
@@ -866,6 +896,10 @@ public class GamePanel extends javax.swing.JPanel {
     // added methods
 
     //start update methods block
+    /**
+     *
+     * Update climber icons
+     */
     private void updateIcon(Icon icon, List<JLabel> labels, JLabel currPos){
         currPos.setIcon(icon);
         for(JLabel label : labels){
@@ -873,6 +907,10 @@ public class GamePanel extends javax.swing.JPanel {
         }
     }
 
+    /**
+     *
+     * Update climber status chcecks if they are alive and update icons if they are dead
+     */
     private void updateClimbersStatus(){
         int counter = 0;
         for(short acclimation : gameLogic.getClimbersAcclimation()){
@@ -906,6 +944,10 @@ public class GamePanel extends javax.swing.JPanel {
         }
     }
 
+    /**
+     *
+     * Updates climber items list
+     */
     private void itemListUpdate() {
         isReadyToChange = false;
         List<Item> items = gameLogic.getItemsList();
@@ -925,6 +967,10 @@ public class GamePanel extends javax.swing.JPanel {
 
     }
 
+    /**
+     *
+     * Update weather and weather icon
+     */
     private void updateWeather(){
         WeatherType weatherType = gameLogic.getWeatherType();
         tempLabel.setText(gameLogic.getTemperature()+"");
@@ -941,12 +987,20 @@ public class GamePanel extends javax.swing.JPanel {
         }
     }
 
+    /**
+     *
+     * Update predicted impact for all climbers
+     */
     private void updatePredictedImpact(){
         List<Short> nightImpactList = gameLogic.getImpactForNextDay();
         predictedAccImpactClimber1Label.setText(nightImpactList.get(0)+"");
         predictedAccImpactClimber2Label.setText(nightImpactList.get(1)+"");
     }
 
+    /**
+     *
+     * Update day counter
+     */
     private void updateDayCounter(){
         dayCounter.setText(gameLogic.getDay()+"");
     }
@@ -964,6 +1018,10 @@ public class GamePanel extends javax.swing.JPanel {
     //end update methods block
 
     //start moving methods block
+    /**
+     *
+     * Makes climber ready to move also visual
+     */
     private void makeReadyToMove(JLabel componentClicked){
         if(gameLogic.getCurrentClimbersPosition().contains(componentClicked)){
             isGoingToMoveClimber = true;
@@ -972,12 +1030,20 @@ public class GamePanel extends javax.swing.JPanel {
         }
     }
 
+    /**
+     *
+     * Make climber un ready to move albo visual
+     */
     private void makeUnreadyToMove(){
         isGoingToMoveClimber = false;
         currentPositionReadyToMove.setBorder(javax.swing.BorderFactory.createBevelBorder(BevelBorder.RAISED));
         currentPositionReadyToMove = null;
     }
 
+    /**
+     *
+     * Makes move call update icon methods and inform GameLogic class
+     */
     private void makeMove(JLabel componentClicked, Map<JLabel, SiteParameters> sitesWithParametersMap){
         short impactBuf = gameLogic.getImpactFromMoving(sitesWithParametersMap, componentClicked, currentPositionReadyToMove);
         if(impactBuf != 127){
@@ -994,6 +1060,10 @@ public class GamePanel extends javax.swing.JPanel {
         makeUnreadyToMove();
     }
 
+    /**
+     *
+     * every JLabel on game board clicked refer to this method it choose what should be done
+     */
     private void clickOperation(JLabel componentClicked, Map<JLabel, SiteParameters> sitesWithParametersMap){
         if(isGoingToMoveClimber){
             List<JLabel> positionList = gameLogic.getCurrentClimbersPosition();
@@ -1016,6 +1086,10 @@ public class GamePanel extends javax.swing.JPanel {
     // end moving methods
 
     //game finished methods
+    /**
+     *
+     * Shows dialog to inform that gamie is lost end exit to menu
+     */
     public void endGameLoose(){
         JOptionPane.showMessageDialog(this,
                 "Game over\nall climbers are dead",
@@ -1024,6 +1098,11 @@ public class GamePanel extends javax.swing.JPanel {
         isGameLost = true;
     }
 
+    /**
+     *
+     * Goes to scoreboard panel
+     * if database is not available shows dialog with score and exit to menu
+     */
     public void endGameWin(){
         if(Window.isDataBaseConnected){
             Window.scoreBoard(gameLogic.getWinScore());
@@ -1038,14 +1117,26 @@ public class GamePanel extends javax.swing.JPanel {
     //end game finished methods
 
     // invoke move operation
+    /**
+     *
+     * Action listener for right sites
+     */
     private void rightSiteMouseClicked(java.awt.event.MouseEvent evt, JLabel componentClicked) {
         clickOperation(componentClicked, sitesWithParametersMapRight);
     }
     // invoke move operation
+    /**
+     *
+     * Action listener for left sites
+     */
     private void leftSiteMouseClicked(java.awt.event.MouseEvent evt, JLabel componentClicked) {
         clickOperation(componentClicked, sitesWithParametersMapLeft);
     }
 
+    /**
+     *
+     * Action listener for next day button runs proper methods
+     */
     private void nextDayButtonActionPerformed(java.awt.event.ActionEvent evt) {
         gameLogic.makeNextDay();
         updateWeather();
@@ -1059,6 +1150,10 @@ public class GamePanel extends javax.swing.JPanel {
 
     }
 
+    /**
+     *
+     * Action listener for exit button ask user by dialog and exit to menu
+     */
     private void exitButtonActionPerformed(java.awt.event.ActionEvent evt) {
         int ans = JOptionPane.showConfirmDialog(this,
                 "Do you want exit game?\nAll progress will be reset!",
@@ -1069,6 +1164,10 @@ public class GamePanel extends javax.swing.JPanel {
         }
     }
 
+    /**
+     *
+     * Action listener item list climber 1
+     */
     private void thingsList1ItemStateChanged(java.awt.event.ItemEvent evt) {
         if(isReadyToChange){
             gameLogic.setItemToClimber((Item) evt.getItem(),0);
@@ -1077,6 +1176,10 @@ public class GamePanel extends javax.swing.JPanel {
 
     }
 
+    /**
+     *
+     * Action listener item list climber 2
+     */
     private void thingsList2ItemStateChanged(java.awt.event.ItemEvent evt) {
         if(isReadyToChange){
             gameLogic.setItemToClimber((Item) evt.getItem(),1);
@@ -1086,64 +1189,120 @@ public class GamePanel extends javax.swing.JPanel {
 
 
     // Variables declaration - do not modify
+    /** Climber 1 icon */
     private javax.swing.JLabel climber1Icon;
+    /** Climber 1 icon */
     private javax.swing.JLabel climber1Icon1;
+    /** Climber 1 icon */
     private javax.swing.JLabel climber1Icon2;
+    /** Climber 2 icon */
     private javax.swing.JLabel climber2Icon;
+    /** Climber 2 icon */
     private javax.swing.JLabel climber2Icon1;
+    /** Climber 2 icon */
     private javax.swing.JLabel climber2Icon2;
+    /** Climber 1 acclimation progress bar */
     private javax.swing.JProgressBar acclimatizationClimber1;
+    /** Climber 2 acclimation progress bar */
     private javax.swing.JProgressBar acclimatizationClimber2;
     private javax.swing.JLabel baseLeft;
     private javax.swing.JLabel baseRight;
     private javax.swing.JLabel dayCounter;
+    /** Exit button */
     private javax.swing.JButton exitButton;
+    /** site */
     private javax.swing.JPanel fifthSiteCRoute;
+    /** site */
     private javax.swing.JLabel fifthSiteCRouteLeft;
+    /** site */
     private javax.swing.JLabel fifthSiteCRouteRight;
+    /** site */
     private javax.swing.JPanel fifthSiteDRoute;
+    /** site */
     private javax.swing.JLabel fifthSiteDRouteLeft;
+    /** site */
     private javax.swing.JLabel fifthSiteDRouteRight;
+    /** site */
     private javax.swing.JPanel fifthSiteERoute;
+    /** site */
     private javax.swing.JLabel fifthSiteERouteLeft;
+    /** site */
     private javax.swing.JLabel fifthSiteERouteRight;
-    private javax.swing.JPanel fourthSiteCRoute;
+    /** site */
     private javax.swing.JLabel fourthSiteCRouteLeft;
+    /** site */
+    private javax.swing.JPanel fourthSiteCRoute;
+    /** site */
     private javax.swing.JLabel fourthSiteCRouteRight;
+    /** site */
     private javax.swing.JPanel fourthSiteDRoute;
+    /** site */
     private javax.swing.JLabel fourthSiteDRouteLeft;
+    /** site */
     private javax.swing.JLabel fourthSiteDRouteRight;
+    /** site */
     private javax.swing.JPanel fourthSiteERoute;
+    /** site */
     private javax.swing.JLabel fourthSiteERouteLeft;
+    /** site */
     private javax.swing.JLabel fourthSiteERouteRight;
+    /** (Generated) */
     private javax.swing.JLabel jLabel1;
+    /** (Generated) */
     private javax.swing.JLabel jLabel2;
+    /** (Generated) */
     private javax.swing.JLabel jLabel3;
+    /** (Generated) */
     private javax.swing.JLabel jLabel4;
+    /** (Generated) */
     private javax.swing.JLabel jLabel5;
+    /** (Generated) */
     private javax.swing.JLabel jLabel6;
+    /** (Generated) */
     private javax.swing.JLabel jLabel7;
+    /** (Generated) */
     private javax.swing.JLayeredPane jLayeredPane1;
+    /** (Generated) */
     private javax.swing.JPanel jPanel1;
+    /** Day button */
     private javax.swing.JButton nextDayButton;
+    /** Predicted impact on acclimation for climber 1 */
     private javax.swing.JLabel predictedAccImpactClimber1Label;
+    /** Predicted impact on acclimation for climber 2 */
     private javax.swing.JLabel predictedAccImpactClimber2Label;
+    /** site */
     private javax.swing.JPanel secondSite;
+    /** site */
     private javax.swing.JLabel secondSiteLeft;
+    /** site */
     private javax.swing.JLabel secondSiteRight;
+    /** (Generated) */
     private javax.swing.JLabel tampLabel;
+    /** (Generated) */
     private javax.swing.JLabel tempLabel;
+    /** Climber 1 item list */
     private javax.swing.JComboBox<Item> itemsList1;
+    /** Climber 1 item list */
     private javax.swing.JComboBox<Item> itemsList2;
+    /** site */
     private javax.swing.JPanel thirdSite;
+    /** site */
     private javax.swing.JPanel thirdSiteCRoute;
+    /** site */
     private javax.swing.JLabel thirdSiteCRouteLeft;
+    /** site */
     private javax.swing.JLabel thirdSiteCRouteRight;
+    /** site */
     private javax.swing.JLabel thirdSiteLeft;
+    /** site */
     private javax.swing.JLabel thirdSiteRight;
+    /** site */
     private javax.swing.JPanel topSite;
+    /** site */
     private javax.swing.JLabel topSiteLeft;
+    /** site */
     private javax.swing.JLabel topSiteRight;
+    /** site */
     private javax.swing.JLabel weatherIcon;
     // End of variables declaration
 }

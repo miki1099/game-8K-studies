@@ -11,14 +11,22 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
 
+/**
+ * Gui class to show scoreboard
+ * @author Michal Glodek
+ */
 public class ScoreBoardPanel extends javax.swing.JPanel {
-
+    /** Scoreboard instance it can be created only once */
     private static final ScoreBoardPanel INSTANCE = new ScoreBoardPanel();
+    /** Image for background */
     private Image img;
+    /** Object used for manage score database */
     private final ScoreBoardLogic scoreBoardLogic = new ScoreBoardLogic();
+    /** Score that player got after game (optional) */
     private int score;
+
     /**
-     * Creates new form ScoreBoardPanel
+     * Creates new form ScoreBoardPanel and sets background
      */
     private ScoreBoardPanel() {
         try {
@@ -29,6 +37,9 @@ public class ScoreBoardPanel extends javax.swing.JPanel {
         initComponents();
     }
 
+    /**
+     * Returns ScoreBoardPanel instance (singleton-eager) without score after game
+     */
     public static ScoreBoardPanel getInstance(){
         INSTANCE.showScoreList();
         INSTANCE.repaint();
@@ -36,6 +47,10 @@ public class ScoreBoardPanel extends javax.swing.JPanel {
         return INSTANCE;
     }
 
+    /**
+     * Returns ScoreBoardPanel instance (singleton-eager) with score after game
+     * @param score
+     */
     public static ScoreBoardPanel getInstance(int score){
         INSTANCE.saveScoreButon.setEnabled(true);
         INSTANCE.showScoreToUser(score);
@@ -46,10 +61,20 @@ public class ScoreBoardPanel extends javax.swing.JPanel {
         return INSTANCE;
     }
 
+    /**
+     * Show on gui player's score
+     * @param score
+     */
     private void showScoreToUser(int score){
         scoreLabel.setText("Your score: " + score);
     }
 
+    /**
+     * Sets app look for user
+     * who only want to see scores visibilityMod == false
+     * or who want to see his score and save it visibilityMod == true
+     * @param visibilityMod
+     */
     private void setVisibility(boolean visibilityMod){
         INSTANCE.scoreLabel.setVisible(visibilityMod);
         INSTANCE.userLabel.setVisible(visibilityMod);
@@ -57,6 +82,9 @@ public class ScoreBoardPanel extends javax.swing.JPanel {
         INSTANCE.jScrollPane1.setVisible(visibilityMod);
     }
 
+    /**
+     * Get lit from scoreBoardLogic and show it to user
+     */
     private void showScoreList(){
         List<Score> scores = scoreBoardLogic.getSortedScoreList();
         Object[][] data = getScoresArray(scores);
@@ -72,6 +100,10 @@ public class ScoreBoardPanel extends javax.swing.JPanel {
         });
     }
 
+    /**
+     * Return table ready tu use in Jtable
+     * @param scores scores list from ScoreBoardLogic
+     */
     private Object[][] getScoresArray(List<Score> scores){
         Object[][] returnArray = new Object[scores.size()][4];
         for(int i = 0; i < scores.size(); i++){
@@ -85,6 +117,9 @@ public class ScoreBoardPanel extends javax.swing.JPanel {
         return returnArray;
     }
 
+    /**
+     * Adds score and username from userNameTextArea to database
+     */
     private void addUserWithScore(){
         String userName = this.userNameTextArea.getText();
         if(userName == null || userName.equals("")){
@@ -248,10 +283,16 @@ public class ScoreBoardPanel extends javax.swing.JPanel {
         );
     }// </editor-fold>
 
+    /**
+     * call method addUserWithScore()
+     */
     private void saveScoreButonActionPerformed(java.awt.event.ActionEvent evt) {
         INSTANCE.addUserWithScore();
     }
 
+    /**
+     * call method exitToMenu() Window class
+     */
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {
         Window.exitToMenu();
     }
@@ -263,10 +304,13 @@ public class ScoreBoardPanel extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    /** (Generated) Button to save score  */
     private javax.swing.JButton saveScoreButon;
     private javax.swing.JLabel scoreLabel;
+    /** (Generated) Table for scores */
     private javax.swing.JTable scoreTable;
     private javax.swing.JLabel userLabel;
+    /** (Generated) Text area for user name  */
     private javax.swing.JTextArea userNameTextArea;
     // End of variables declaration
 }
